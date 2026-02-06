@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yarn Match: Jilli Jumper</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh; padding: 2rem; color: #333; line-height: 1.6;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 2rem; border-radius: 16px; margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+        .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .header .size { font-size: 1.1rem; opacity: 0.9; }
+        .header .pattern-meta {
+            display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; font-size: 0.95rem;
+        }
+        .header .pattern-meta-item { display: flex; align-items: center; gap: 0.4rem; }
+        .header .pattern-meta-label { opacity: 0.7; }
+        .header .pattern-meta-value { font-weight: 500; }
+        .header .notes {
+            margin-top: 1rem; padding: 0.75rem 1rem;
+            background: rgba(255,255,255,0.15); border-radius: 8px; font-size: 0.95rem;
+        }
+        .section {
+            background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            font-size: 1.25rem; font-weight: 600; color: #667eea; margin-bottom: 1rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .requirements-table { width: 100%; border-collapse: collapse; }
+        .requirements-table th {
+            text-align: left; padding: 0.75rem; background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef; font-weight: 600; color: #495057;
+        }
+        .requirements-table td { padding: 0.75rem; border-bottom: 1px solid #e9ecef; }
+        .grist-badge {
+            display: inline-block; padding: 0.25rem 0.75rem; background: #e9ecef;
+            border-radius: 20px; font-size: 0.85rem; font-weight: 500;
+        }
+        .combined-grist {
+            margin-top: 1rem; padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 8px; font-weight: 500;
+        }
+        .match-group { margin-bottom: 2rem; }
+        .match-group-title {
+            font-size: 1.1rem; font-weight: 600; color: #333; margin-bottom: 1rem;
+            padding-bottom: 0.5rem; border-bottom: 2px solid #e9ecef;
+        }
+        .match-card {
+            display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; padding: 1rem;
+            background: #f8f9fa; border-radius: 10px; margin-bottom: 0.75rem; align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .match-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .match-icon {
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+        }
+        .match-icon.enough { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .match-icon.not-enough { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
+        .match-icon.combo { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .match-icon.unknown { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .match-details { min-width: 0; }
+        .match-name { font-weight: 600; color: #333; margin-bottom: 0.25rem; }
+        .match-meta { font-size: 0.85rem; color: #666; }
+        .match-meta span { margin-right: 1rem; }
+        .match-yardage { text-align: right; white-space: nowrap; }
+        .yardage-have { font-size: 1.1rem; font-weight: 600; }
+        .yardage-have.enough { color: #11998e; }
+        .yardage-have.not-enough { color: #eb3349; }
+        .yardage-need { font-size: 0.8rem; color: #666; }
+        .combo-card { background: linear-gradient(135deg, #f8f9fa 0%, #e9f4ff 100%); border: 1px solid #c5dff8; }
+        .combo-yarns { display: flex; flex-direction: column; gap: 0.5rem; }
+        .combo-yarn { display: flex; align-items: center; gap: 0.5rem; }
+        .combo-yarn-status { font-size: 0.9rem; }
+        .no-matches { text-align: center; padding: 2rem; color: #666; font-style: italic; }
+        .footer { text-align: center; padding: 1.5rem; color: #888; font-size: 0.85rem; }
+        .color-dot {
+            display: inline-block; width: 12px; height: 12px; border-radius: 50%;
+            margin-right: 0.5rem; border: 1px solid rgba(0,0,0,0.1);
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .match-card { grid-template-columns: auto 1fr; grid-template-rows: auto auto; }
+            .match-yardage { grid-column: 2; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Jilli Jumper</h1>
+            <div class="size">Size: 2</div>
+            <div class="pattern-meta">
+                <div class="pattern-meta-item"><span class="pattern-meta-label">Designer:</span> <span class="pattern-meta-value">Anne Ventzel</span></div>
+                <div class="pattern-meta-item"><span class="pattern-meta-label">Yarn Weight:</span> <span class="pattern-meta-value">Aran</span></div>
+                <div class="pattern-meta-item"><span class="pattern-meta-label">Needles:</span> <span class="pattern-meta-value">US 4 - 3.5mm, US 6 - 4.0mm, US 7 - 4.5mm</span></div>
+            </div>
+            <div class="notes">Top-down seamless raglan construction. One strand of each yarn held together throughout (1 Triple + 1 Håndværksgarn + 1 Tilia = 3 strands total). Features twisted rib details, rolling edges at neck and cuffs, curved hem with short rows. Gauge 17 sts x 25 rows = 10cm in stockinette. Recommends 25-40cm positive ease for relaxed fit.</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><span>🧶</span> Yarn Requirements</div>
+            <table class="requirements-table">
+                <thead><tr><th>Yarn</th><th>Grist</th><th>Needed</th></tr></thead>
+                <tbody>
+<tr><td><strong>Hjelholt Triple (42 cream)</strong></td><td><span class="grist-badge">1.800 yd/g</span></td><td>1260 yards (700g)</td></tr>
+<tr><td><strong>Hjelholt Håndværksgarn (09 aubergine)</strong></td><td><span class="grist-badge">2.000 yd/g</span></td><td>1200 yards (600g)</td></tr>
+<tr><td><strong>Filcolana Tilia (325 coffee)</strong></td><td><span class="grist-badge">9.190 yd/g</span></td><td>1379 yards (150g)</td></tr>
+</tbody></table>
+<div class="combined-grist">⚠️ <strong>Held Together</strong> — Combined grist: <span class="grist-badge">0.770 yd/g</span></div>
+</div><div class="section"><div class="section-title"><span>✨</span> Your Stash Matches</div>
+<div class="match-group"><div class="match-group-title">Matches for: Hjelholt Triple (42 cream) <span style="font-weight: normal; color: #888;">(grist: 1.800 yd/g, need 1260 yards)</span></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Baby Boucle</div><div class="match-meta"><span>Grist: 1.800 yd/g (0.0% diff)</span><span><span class="color-dot" style="background: #f8f8f8"></span>White</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">0 yards</div><div class="yardage-need">Need 1260</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Flock Yarn</div><div class="match-meta"><span>Grist: 1.786 yd/g (0.8% diff)</span><span><span class="color-dot" style="background: #a8d5ba"></span>Bare</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">50 yards</div><div class="yardage-need">Need 1260</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Super saver</div><div class="match-meta"><span>Grist: 1.778 yd/g (1.2% diff)</span><span><span class="color-dot" style="background: #f8f8f8"></span>White</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">0 yards</div><div class="yardage-need">Need 1260</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Peace Fleece Worsted</div><div class="match-meta"><span>Grist: 1.770 yd/g (1.7% diff)</span><span><span class="color-dot" style="background: #f8f8f8"></span>Creamy white</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">25 yards</div><div class="yardage-need">Need 1260</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Farm yarn</div><div class="match-meta"><span>Grist: 1.770 yd/g (1.7% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Gray</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">200 yards</div><div class="yardage-need">Need 1260</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Blackbird Linen</div><div class="match-meta"><span>Grist: 1.750 yd/g (2.8% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Gray</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">19 yards</div><div class="yardage-need">Need 1260</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Blackbird Linen</div><div class="match-meta"><span>Grist: 1.750 yd/g (2.8% diff)</span><span><span class="color-dot" style="background: #3498db"></span>Dark blue</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">47 yards</div><div class="yardage-need">Need 1260</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Simply Soft</div><div class="match-meta"><span>Grist: 1.853 yd/g (2.9% diff)</span><span><span class="color-dot" style="background: #3498db"></span>Deep Blue</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">0 yards</div><div class="yardage-need">Need 1260</div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Wool of the Andes Sport + Knitting for Olive Merino</div><div class="match-meta"><span>Combined grist: 1.824 yd/g (1.4% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Light gray</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Wool of the Andes Sport: 685 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Knitting for Olive Merino: 317 yards</span></div></div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Wool of the Andes Sport + Pure Laine</div><div class="match-meta"><span>Combined grist: 1.824 yd/g (1.4% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Light gray</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Wool of the Andes Sport: 685 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Pure Laine: 191 yards</span></div></div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Brava sport + 2 ply Jumper Weight</div><div class="match-meta"><span>Combined grist: 1.766 yd/g (1.9% diff)</span><span><span class="color-dot" style="background: #3498db"></span>Light blue</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Brava sport: 0 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>2 ply Jumper Weight: 125 yards</span></div></div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Wool of the Andes Sport + Cashmere Classic</div><div class="match-meta"><span>Combined grist: 1.760 yd/g (2.2% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Light gray</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Wool of the Andes Sport: 685 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Cashmere Classic: 0 yards</span></div></div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Swish + 2 ply Lace Weight</div><div class="match-meta"><span>Combined grist: 1.846 yd/g (2.6% diff)</span><span><span class="color-dot" style="background: #9b59b6"></span>Purple</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Swish: 59 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>2 ply Lace Weight: 266 yards</span></div></div></div></div>
+</div>
+<div class="match-group"><div class="match-group-title">Matches for: Hjelholt Håndværksgarn (09 aubergine) <span style="font-weight: normal; color: #888;">(grist: 2.000 yd/g, need 1200 yards)</span></div>
+<div class="match-card"><div class="match-icon enough">✓</div><div class="match-details"><div class="match-name">Peer Gynt</div><div class="match-meta"><span>Grist: 2.000 yd/g (0.0% diff)</span><span><span class="color-dot" style="background: #27ae60"></span>Light gray green</span></div></div><div class="match-yardage"><div class="yardage-have enough">1500 yards</div><div class="yardage-need">✓ Enough!</div></div></div>
+<div class="match-card"><div class="match-icon enough">✓</div><div class="match-details"><div class="match-name">Peer Gynt</div><div class="match-meta"><span>Grist: 2.000 yd/g (0.0% diff)</span><span><span class="color-dot" style="background: #3498db"></span>Dark gray blue</span></div></div><div class="match-yardage"><div class="yardage-have enough">1800 yards</div><div class="yardage-need">✓ Enough!</div></div></div>
+<div class="match-card"><div class="match-icon enough">✓</div><div class="match-details"><div class="match-name">Shetland Wool</div><div class="match-meta"><span>Grist: 2.101 yd/g (5.0% diff)</span><span><span class="color-dot" style="background: #8b4513"></span>Dark brown/black</span></div></div><div class="match-yardage"><div class="yardage-have enough">1250 yards</div><div class="yardage-need">✓ Enough!</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Cox Farm Yarn</div><div class="match-meta"><span>Grist: 2.000 yd/g (0.0% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Gray</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">78 yards</div><div class="yardage-need">Need 1200</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Maxi Soft</div><div class="match-meta"><span>Grist: 1.980 yd/g (1.0% diff)</span><span><span class="color-dot" style="background: #ff6b9d"></span>Hot pink</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">0 yards</div><div class="yardage-need">Need 1200</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">3 Ply DK</div><div class="match-meta"><span>Grist: 2.027 yd/g (1.4% diff)</span><span><span class="color-dot" style="background: #f5f5dc"></span>Cream</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">225 yards</div><div class="yardage-need">Need 1200</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Scrub-ology 2.0</div><div class="match-meta"><span>Grist: 2.047 yd/g (2.4% diff)</span><span><span class="color-dot" style="background: #27ae60"></span>Green</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">0 yards</div><div class="yardage-need">Need 1200</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Scrub-ology 2.0</div><div class="match-meta"><span>Grist: 2.047 yd/g (2.4% diff)</span><span><span class="color-dot" style="background: #3498db"></span>Light blue</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">0 yards</div><div class="yardage-need">Need 1200</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Fishermen's Wool</div><div class="match-meta"><span>Grist: 2.048 yd/g (2.4% diff)</span><span><span class="color-dot" style="background: #d4c4a8"></span>Light beige</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">0 yards</div><div class="yardage-need">Need 1200</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Classic Wool Worsted</div><div class="match-meta"><span>Grist: 1.940 yd/g (3.0% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Gray</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">0 yards</div><div class="yardage-need">Need 1200</div></div></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Classic Wool Worsted</div><div class="match-meta"><span>Grist: 1.940 yd/g (3.0% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Gray</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">0 yards</div><div class="yardage-need">Need 1200</div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Brava sport + 2 ply Lace Weight</div><div class="match-meta"><span>Combined grist: 1.994 yd/g (0.3% diff)</span><span><span class="color-dot" style="background: #3498db"></span>Light blue</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Brava sport: 0 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>2 ply Lace Weight: 266 yards</span></div></div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Nimbus + Jumper Weight</div><div class="match-meta"><span>Combined grist: 1.961 yd/g (1.9% diff)</span><span><span class="color-dot" style="background: #e74c3c"></span>Blue, red and gray</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Nimbus: 410 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Jumper Weight: 8 yards</span></div></div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Wool of the Andes Sport + Suri Silk</div><div class="match-meta"><span>Combined grist: 1.933 yd/g (3.4% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Light gray</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Wool of the Andes Sport: 685 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Suri Silk: 656 yards</span></div></div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Wool of the Andes Sport + gotland lace</div><div class="match-meta"><span>Combined grist: 1.929 yd/g (3.5% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Light gray</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Wool of the Andes Sport: 685 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>gotland lace: 750 yards</span></div></div></div></div>
+<div class="match-card combo-card"><div class="match-icon combo">🔗</div><div class="match-details"><div class="match-name">Combo: Nimbus + Hawthorne Tonal Hand Paint</div><div class="match-meta"><span>Combined grist: 1.908 yd/g (4.6% diff)</span><span><span class="color-dot" style="background: #e74c3c"></span>Blue, red and gray</span></div><div class="combo-yarns" style="margin-top: 0.5rem; font-size: 0.9rem;"><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Nimbus: 410 yards</span></div><div class="combo-yarn"><span class="combo-yarn-status">✗</span><span>Hawthorne Tonal Hand Paint: 29 yards</span></div></div></div></div>
+</div>
+<div class="match-group"><div class="match-group-title">Matches for: Filcolana Tilia (325 coffee) <span style="font-weight: normal; color: #888;">(grist: 9.190 yd/g, need 1379 yards)</span></div>
+<div class="match-card"><div class="match-icon not-enough">✗</div><div class="match-details"><div class="match-name">Kid Seta</div><div class="match-meta"><span>Grist: 9.160 yd/g (0.3% diff)</span><span><span class="color-dot" style="background: #95a5a6"></span>Gray</span></div></div><div class="match-yardage"><div class="yardage-have not-enough">27 yards</div><div class="yardage-need">Need 1379</div></div></div>
+</div>
+<div class="match-group"><div class="match-group-title" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); padding: 0.75rem; border-radius: 8px; border-bottom: none;">🧵 Single Yarns Matching Combined Grist <span style="font-weight: normal; color: #666;">(0.770 yd/g, need 1379 yards)</span></div>
+<div class="no-matches">No single-yarn matches for combined grist.</div>
+</div>
+</div><div class="footer">Generated by Yarn Matcher • February 06, 2026 at 08:12 AM</div></div></body></html>
