@@ -1,31 +1,18 @@
 # Rebecca's Knits
 
-A static knitting gallery website at **https://rinva19.github.io/yarn/**
+**Live site:** https://rinva19.github.io/yarn/
 
-## Update the Website
+## To Update the Website
 
-Run this command from anywhere:
+After adding new projects in Airtable, run these two commands:
 
 ```bash
 python3 ~/Documents/Household/Yarn/generate_knits_gallery.py
-```
 
-Then push to GitHub:
-
-```bash
 cd ~/Documents/Household/Yarn && git add -A && git commit -m "Update gallery" && git push
 ```
 
-The site updates automatically after pushing.
-
-## What It Does
-
-- Pulls all knitting projects from the Airtable Projects table
-- Downloads the first photo from each project
-- Computes stats from Summary Tables (miles knitted, miles in stash)
-- Generates `index.html` with a photo grid
-
-Only projects with yarn assigned are included (excludes sewing/quilts).
+The site updates automatically within a few minutes after pushing.
 
 ---
 
