@@ -210,3 +210,5 @@ __marimo__/
 credentials.py
 config/credentials.py
 
+# HTML output files
+pattern_matches/*.html

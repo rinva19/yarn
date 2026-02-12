@@ -31,7 +31,7 @@ Please parse this and return a JSON object with:
   - color (e.g., "Color A (main)", "Color B (contrast)")
   - held_together_with (null or yarn name if held together)
 - combined_grist (if yarns held together)
-- notes (any relevant construction info)
+- notes (single string of relevant construction info, written as natural sentences separated by periods, no list formatting)
 
 Format as clean JSON only, no markdown code blocks.
 ```
