@@ -1,0 +1,3235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rebecca's Knits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #f8f2e8;
+      --warm-white: #fdf9f3;
+      --terracotta: #c4714a;
+      --rust: #a85532;
+      --deep-brown: #3d2214;
+      --warm-tan: #d4b896;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--cream);
+      font-family: 'Lora', Georgia, serif;
+      color: var(--deep-brown);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23f8f2e8'/%3E%3Ccircle cx='1' cy='1' r='0.5' fill='%23e8ddd0' opacity='0.4'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3.5rem 2rem 2rem;
+      background: linear-gradient(180deg, var(--warm-white) 0%, var(--cream) 100%);
+      border-bottom: 2px solid var(--warm-tan);
+    }
+
+    .yarn-decoration {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+
+    .yarn-line {
+      height: 2px;
+      width: 60px;
+      background: linear-gradient(90deg, transparent, var(--terracotta), transparent);
+      border-radius: 2px;
+    }
+
+    .yarn-icon { font-size: 1.4rem; }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 600;
+      color: var(--deep-brown);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    h1 em { font-style: italic; color: var(--terracotta); }
+
+    .subtitle {
+      margin-top: 0.6rem;
+      font-size: 1rem;
+      color: var(--rust);
+      font-style: italic;
+      letter-spacing: 0.05em;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--warm-tan);
+      flex-wrap: wrap;
+    }
+
+    .stat { text-align: center; }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--terracotta);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--rust);
+      opacity: 0.8;
+    }
+
+    .gallery-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    .gallery-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--rust);
+      opacity: 0.75;
+    }
+
+    .gallery-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--warm-tan), transparent);
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--warm-white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow:
+        0 4px 6px rgba(61, 34, 20, 0.06),
+        0 10px 40px rgba(61, 34, 20, 0.1),
+        0 0 0 1px rgba(196, 113, 74, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 8px 12px rgba(61, 34, 20, 0.08),
+        0 16px 48px rgba(61, 34, 20, 0.15),
+        0 0 0 1px rgba(196, 113, 74, 0.2);
+    }
+
+    .card-image {
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: var(--cream);
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover .card-image img {
+      transform: scale(1.05);
+    }
+
+    .card-content {
+      padding: 1rem 1.25rem 1.25rem;
+    }
+
+    .project-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--deep-brown);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .project-date {
+      font-size: 0.8rem;
+      color: var(--terracotta);
+      font-style: italic;
+      margin-bottom: 0.4rem;
+    }
+
+    .project-yarn {
+      font-size: 0.85rem;
+      color: var(--deep-brown);
+      margin-bottom: 0.25rem;
+    }
+
+    .project-grams {
+      font-size: 0.8rem;
+      color: var(--rust);
+      opacity: 0.8;
+      margin-bottom: 0.4rem;
+    }
+
+    .project-pattern {
+      font-size: 0.85rem;
+      color: var(--deep-brown);
+      font-style: italic;
+    }
+
+    .project-designer {
+      font-size: 0.75rem;
+      color: var(--rust);
+      opacity: 0.7;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--rust);
+      opacity: 0.6;
+      font-style: italic;
+      border-top: 1px solid var(--warm-tan);
+    }
+
+    @media (max-width: 600px) {
+      .stats-bar { gap: 1.5rem; }
+      .gallery-wrapper { padding: 0 0.75rem 2rem; }
+      .photo-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="yarn-decoration">
+      <div class="yarn-line"></div>
+      <span class="yarn-icon">🧶</span>
+      <div class="yarn-line"></div>
+    </div>
+    <h1>Rebecca's <em>Knits</em></h1>
+    <p class="subtitle">a collection of finished objects</p>
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-number">336</span>
+        <span class="stat-label">Finished Objects</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">5+</span>
+        <span class="stat-label">Years Knitting</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">47.3</span>
+        <span class="stat-label">Miles Knitted</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">22.6</span>
+        <span class="stat-label">Miles in Stash</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="gallery-wrapper">
+    <div class="gallery-label">Browse the collection</div>
+    <div class="photo-grid">
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Safe___Warm_Baby_Sleep_Bag_for_Baby_Price_483ba7b3.jpg" alt="Safe & Warm Baby Sleep Bag for Baby Price" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Safe & Warm Baby Sleep Bag for Baby Price</h3>
+          <p class="project-date">February 2026</p>
+          <p class="project-yarn">KnitPicks Wool of the Andes Sport Solstice Heather</p>
+          <p class="project-grams">151g</p>
+          <p class="project-pattern">Safe & Warm Baby Sleep Bag</p>
+          <p class="project-designer">by Mairlynd</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Melt_the_Ice_Hat_c96c3a62.jpg" alt="Melt the Ice Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Melt the Ice Hat</h3>
+          <p class="project-date">January 2026</p>
+          <p class="project-yarn">Tukuwool Tukuwool DK H20 Hohka</p>
+          <p class="project-grams">53g</p>
+          <p class="project-pattern">Melt the Ice Hat</p>
+          <p class="project-designer">by Paul Neary</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Safe___Warm_Baby_Sleep_Bag_for_Baby_Francis_32aeef97.jpg" alt="Safe & Warm Baby Sleep Bag for Baby Francis" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Safe & Warm Baby Sleep Bag for Baby Francis</h3>
+          <p class="project-date">January 2026</p>
+          <p class="project-yarn">KnitPicks High Desert Riverbend</p>
+          <p class="project-grams">105g</p>
+          <p class="project-pattern">Safe & Warm Baby Sleep Bag</p>
+          <p class="project-designer">by Mairlynd</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/One_Row_Handspun_Scarf_for_David_5ee18e8f.jpg" alt="One Row Handspun Scarf for David" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">One Row Handspun Scarf for David</h3>
+          <p class="project-date">January 2026</p>
+          <p class="project-yarn">Loops & Threads Charisma Blue Grass J97</p>
+          <p class="project-grams">200g</p>
+          <p class="project-pattern">One Row Handspun Scarf</p>
+          <p class="project-designer">by Stephanie Pearl McPhee</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Spinelli_Hat_for_David_816a455f.jpg" alt="Spinelli Hat for David" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Spinelli Hat for David</h3>
+          <p class="project-date">January 2026</p>
+          <p class="project-yarn">Loops & Threads Charisma Blue Grass J97</p>
+          <p class="project-grams">96g</p>
+          <p class="project-pattern">Spinelli Hat</p>
+          <p class="project-designer">by Knitatitude</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Vanilla_Socks_for_Sam_5bcb8bdf.jpg" alt="Vanilla Socks for Sam" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Vanilla Socks for Sam</h3>
+          <p class="project-date">January 2026</p>
+          <p class="project-yarn">Regia Regia 4 Ply Color Snowflake</p>
+          <p class="project-grams">81g</p>
+          <p class="project-pattern">Vanilla Socks on Magic Loop</p>
+          <p class="project-designer">by Crazy Sock Lady Designs</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Emotional_Support_Chicken_for_Mati_93314ef2.jpg" alt="Emotional Support Chicken for Mati" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Emotional Support Chicken for Mati</h3>
+          <p class="project-date">January 2026</p>
+          <p class="project-yarn">KnitPicks Wonderfluff Bare #B0</p>
+          <p class="project-grams">78g</p>
+          <p class="project-pattern">Emotional Support Chicken</p>
+          <p class="project-designer">by Annette Corsino</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Purl_Pouch_-_Medium_cad478b0.jpg" alt="Purl Pouch - Medium" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Purl Pouch - Medium</h3>
+          <p class="project-date">December 2025</p>
+          <p class="project-yarn">Purl Soho Linen Quill Stillwater Blue</p>
+          <p class="project-grams">55g</p>
+          <p class="project-pattern">Purl Pouch</p>
+          <p class="project-designer">by Tori Yu</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Purl_Pouch_-_Small_03d806d6.jpg" alt="Purl Pouch - Small" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Purl Pouch - Small</h3>
+          <p class="project-date">December 2025</p>
+          <p class="project-yarn">Purl Soho Linen Quill Stillwater Blue</p>
+          <p class="project-grams">30g</p>
+          <p class="project-pattern">Purl Pouch</p>
+          <p class="project-designer">by Tori Yu</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Emotional_Support_Chicken_-_Henela_Moilahen_cd7d370d.jpg" alt="Emotional Support Chicken - Henela Moilahen" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Emotional Support Chicken - Henela Moilahen</h3>
+          <p class="project-date">December 2025</p>
+          <p class="project-yarn">Juniper Moon Farm Beatrix 43 - Neptune</p>
+          <p class="project-grams">104g</p>
+          <p class="project-pattern">Emotional Support Chicken</p>
+          <p class="project-designer">by Annette Corsino</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Scarf_for_Pasi_889da9c1.jpg" alt="Scarf for Pasi" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Scarf for Pasi</h3>
+          <p class="project-date">December 2025</p>
+          <p class="project-yarn">Cardiff Cashmere Classic 677</p>
+          <p class="project-grams">112g</p>
+          <p class="project-pattern">Men's Dress Scarf</p>
+          <p class="project-designer">by Laura Penrose</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/World_s_Simplest_Mittens_for_Beak_4c20e87b.jpg" alt="World's Simplest Mittens for Beak" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">World's Simplest Mittens for Beak</h3>
+          <p class="project-date">December 2025</p>
+          <p class="project-yarn">Istex Léttlopi 1412 Pink Heather</p>
+          <p class="project-grams">45g</p>
+          <p class="project-pattern">World's Simplest Mittens</p>
+          <p class="project-designer">by Tin Can Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Incredible_Blanket_c4a8e56d.jpg" alt="Incredible Blanket" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Incredible Blanket</h3>
+          <p class="project-date">December 2025</p>
+          <p class="project-yarn">Purl Soho Linen Quill minis Baked Earth, Birds Egg Blue, Blue Blue, Blue Pansy, Bright Flamingo, Buttercup Yellow, Butterscotch Yellow, Chestnut Red, Clover Green, Cobalt Blue, Crocus Bud, Eggshell Blue, Fresh Nutmeg, Fresh Pickle, Golden Green, Golden Wheat, Grasshopper Green, Kettle Black, Kiln Red, Lavender Opal, Lemon Lime, Lychee Pink, Magnolia Blossom, Pale Celery, Pale Mushroom, Pale Oats, Peachy Pink, Peony Pink, Pine Cone, Pink Pop, Purple Clematis, Raw Sienna, Red Poppy, Reed Gray, Stillwater Blue, Stonewall Gray, Super Orange, True Turquoise, Turmeric Yellow, Wheat Flour</p>
+          <p class="project-grams">765g</p>
+          <p class="project-pattern">Incredible Blanket</p>
+          <p class="project-designer">by Hiromi Glover</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Bean_and_Olive_sweater_-_white_and_pink_e4f6216d.jpg" alt="Bean and Olive sweater - white and pink" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Bean and Olive sweater - white and pink</h3>
+          <p class="project-date">December 2025</p>
+          <p class="project-yarn">KnitPicks Swish White</p>
+          <p class="project-grams">212g</p>
+          <p class="project-pattern">Bean and Olive sweater</p>
+          <p class="project-designer">by Andrea Mowry</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Ribbed_Raglan_Pullover_for_Alyson_845e6afd.jpg" alt="Ribbed Raglan Pullover for Alyson" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Ribbed Raglan Pullover for Alyson</h3>
+          <p class="project-date">December 2025</p>
+          <p class="project-yarn">The Woolly Thistle Rambler Pine</p>
+          <p class="project-grams">386g</p>
+          <p class="project-pattern">Ribbed Raglan Pullover</p>
+          <p class="project-designer">by Purl Soho</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/On_the_C_Train_x4_for_Singletons_c92b2ca4.jpg" alt="On the C Train x4 for Singletons" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">On the C Train x4 for Singletons</h3>
+          <p class="project-date">November 2025</p>
+          <p class="project-yarn">Peace Fleece Peace Fleece Worsted Antartic White</p>
+          <p class="project-grams">91g</p>
+          <p class="project-pattern">On the C Train</p>
+          <p class="project-designer">by Espace Tricot</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Bean_and_Olive_sweater_-_white_and_red_d9e065ef.jpg" alt="Bean and Olive sweater - white and red" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Bean and Olive sweater - white and red</h3>
+          <p class="project-date">November 2025</p>
+          <p class="project-yarn">KnitPicks Swish White</p>
+          <p class="project-grams">185g</p>
+          <p class="project-pattern">Bean and Olive sweater</p>
+          <p class="project-designer">by Andrea Mowry</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/One_Love_Easy_Mystery_Shawl_45dc7935.jpg" alt="One Love Easy Mystery Shawl" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">One Love Easy Mystery Shawl</h3>
+          <p class="project-date">November 2025</p>
+          <p class="project-yarn">Mt. Airy Farm Mt. Airy Farm Yarn</p>
+          <p class="project-grams">110g</p>
+          <p class="project-pattern">One Love Easy Mystery Shawl</p>
+          <p class="project-designer">by Joji Locatelli</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Sweet_V_Sweater_47610977.jpg" alt="Sweet V Sweater" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Sweet V Sweater</h3>
+          <p class="project-date">November 2025</p>
+          <p class="project-yarn">Cox Farms Cox Farm Yarn</p>
+          <p class="project-grams">316g</p>
+          <p class="project-pattern">Sweet V Sweater</p>
+          <p class="project-designer">by Knitatitude</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Northern_Comfort_Socks_Tukuwool_e08b2599.jpg" alt="Northern Comfort Socks Tukuwool" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Northern Comfort Socks Tukuwool</h3>
+          <p class="project-date">November 2025</p>
+          <p class="project-yarn">Tukuwool Tukuwool Sock H31 avaa</p>
+          <p class="project-grams">100g</p>
+          <p class="project-pattern">Northern Comfort Socks</p>
+          <p class="project-designer">by Donna Snider Designs</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Sweet_V_Skirt_8c9697b6.jpg" alt="Sweet V Skirt" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Sweet V Skirt</h3>
+          <p class="project-date">November 2025</p>
+          <p class="project-yarn">Cox Farms Cox Farm Yarn</p>
+          <p class="project-grams">396g</p>
+          <p class="project-pattern">Sweet V Skirt</p>
+          <p class="project-designer">by Knitatitude</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Hoodola_9c2bbb04.jpg" alt="Hoodola" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Hoodola</h3>
+          <p class="project-date">October 2025</p>
+          <p class="project-yarn">Tukuwool Tukuwool Fingering 33 Virta</p>
+          <p class="project-grams">185g</p>
+          <p class="project-pattern">Hoodola</p>
+          <p class="project-designer">by Laura Nelkin</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Monday_1cda5395.jpg" alt="Monday" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Monday</h3>
+          <p class="project-date">October 2025</p>
+          <p class="project-yarn">Tukuwool Tukuwool Fingering 33 Virta</p>
+          <p class="project-grams">365g</p>
+          <p class="project-pattern">Monday</p>
+          <p class="project-designer">by PetiteKnit, Mette Wendelboe Okkels</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Harvest_Sweater_for_Mary_baby_61662912.jpg" alt="Harvest Sweater for Mary baby" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Harvest Sweater for Mary baby</h3>
+          <p class="project-date">September 2025</p>
+          <p class="project-yarn">Caron Simply Soft Ocean</p>
+          <p class="project-grams">108g</p>
+          <p class="project-pattern">Harvest</p>
+          <p class="project-designer">by Tin Can Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Freestyle_Shirt_52d4819a.jpg" alt="Freestyle Shirt" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Freestyle Shirt</h3>
+          <p class="project-date">August 2025</p>
+          <p class="project-yarn">KnitPicks Shine Sport White</p>
+          <p class="project-grams">342g</p>
+          <p class="project-pattern">Freestyle Shirt</p>
+          <p class="project-designer">by Susanne Müller</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tunisian_Washcloth__6_74bdd976.jpg" alt="Tunisian Washcloth #6" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tunisian Washcloth #6</h3>
+          <p class="project-date">August 2025</p>
+          <p class="project-yarn">KnitPicks Dishie Azure</p>
+          <p class="project-grams">44g</p>
+          <p class="project-pattern">Tunisian Crochet Washcloth</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tunisian_Washcloth_Mitt_64b8a2a1.jpg" alt="Tunisian Washcloth Mitt" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tunisian Washcloth Mitt</h3>
+          <p class="project-date">August 2025</p>
+          <p class="project-yarn">KnitPicks Dishie Azure</p>
+          <p class="project-grams">44g</p>
+          <p class="project-pattern">Tunisian Crochet Washcloth</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tunisian_Crochet_Dishcloth_b98c5d0c.jpg" alt="Tunisian Crochet Dishcloth" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tunisian Crochet Dishcloth</h3>
+          <p class="project-date">August 2025</p>
+          <p class="project-yarn">KnitPicks Dishie Azure</p>
+          <p class="project-grams">193g</p>
+          <p class="project-pattern">Tunisian Crochet Washcloth</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tunisian_Crochet_Washcloth__5_07ce4d5e.jpg" alt="Tunisian Crochet Washcloth #5" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tunisian Crochet Washcloth #5</h3>
+          <p class="project-date">August 2025</p>
+          <p class="project-yarn">KnitPicks Dishie Azure</p>
+          <p class="project-grams">24g</p>
+          <p class="project-pattern">Tunisian Crochet Washcloth</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tunisian_Crochet_Washcloth__4_04a40a61.jpg" alt="Tunisian Crochet Washcloth #4" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tunisian Crochet Washcloth #4</h3>
+          <p class="project-date">August 2025</p>
+          <p class="project-yarn">KnitPicks Dishie Azure</p>
+          <p class="project-grams">15g</p>
+          <p class="project-pattern">Tunisian Crochet Washcloth</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tunisian_Crochet_Washcloth__3_d9751157.jpg" alt="Tunisian Crochet Washcloth #3" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tunisian Crochet Washcloth #3</h3>
+          <p class="project-date">August 2025</p>
+          <p class="project-yarn">KnitPicks Dishie Azure</p>
+          <p class="project-grams">26g</p>
+          <p class="project-pattern">Tunisian Crochet Washcloth</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tunisian_Crochet_Washcloth__2_6a2ebeeb.jpg" alt="Tunisian Crochet Washcloth #2" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tunisian Crochet Washcloth #2</h3>
+          <p class="project-date">August 2025</p>
+          <p class="project-yarn">Sudz Crafting Cotton Frost - Q54018</p>
+          <p class="project-grams">20g</p>
+          <p class="project-pattern">Tunisian Crochet Washcloth</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tunisian_Crochet_Washcloth__1_0c8ae196.jpg" alt="Tunisian Crochet Washcloth #1" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tunisian Crochet Washcloth #1</h3>
+          <p class="project-date">August 2025</p>
+          <p class="project-yarn">Sudz Crafting Cotton Frost - Q54018</p>
+          <p class="project-grams">27g</p>
+          <p class="project-pattern">Tunisian Crochet Washcloth</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Spa_Day_Facecloth__5_7604e093.jpg" alt="Spa Day Facecloth #5" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Spa Day Facecloth #5</h3>
+          <p class="project-date">July 2025</p>
+          <p class="project-yarn">KnitPicks Dishie Azure</p>
+          <p class="project-grams">64g</p>
+          <p class="project-pattern">Spa Day Facecloth</p>
+          <p class="project-designer">by Anne Mancine</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Hazard_Wrap_be8088e9.jpg" alt="Hazard Wrap" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Hazard Wrap</h3>
+          <p class="project-date">June 2025</p>
+          <p class="project-yarn">John Arbon Textiles Knit by Numbers DK KBN126</p>
+          <p class="project-grams">332g</p>
+          <p class="project-pattern">Hazard Wrap</p>
+          <p class="project-designer">by Anne Hanson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Alpen_Belt_Bag_7f1dca54.jpg" alt="Alpen Belt Bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Alpen Belt Bag</h3>
+          <p class="project-date">June 2025</p>
+          
+          
+          <p class="project-pattern">Alpen Belt Bag</p>
+          <p class="project-designer">by Center Street Quilts</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Mara_for_Emily_e2adc8d4.jpg" alt="Mara for Emily" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Mara for Emily</h3>
+          <p class="project-date">April 2025</p>
+          <p class="project-yarn">Aara Mieli Nova</p>
+          <p class="project-grams">72g</p>
+          <p class="project-pattern">Mara</p>
+          <p class="project-designer">by Audrey Borrego</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Esme_project_bag_for_Helena_bc31aa7a.jpg" alt="Esme project bag for Helena" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Esme project bag for Helena</h3>
+          <p class="project-date">April 2025</p>
+          
+          
+          <p class="project-pattern">Esme Project Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/ZigZag_Zen_Blanket_2aa69efa.jpg" alt="ZigZag Zen Blanket" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">ZigZag Zen Blanket</h3>
+          <p class="project-date">April 2025</p>
+          <p class="project-yarn">Wooly Knits 4 ply British Wool 1000 - Cream</p>
+          <p class="project-grams">760g</p>
+          <p class="project-pattern">ZigZag Zen</p>
+          <p class="project-designer">by Anniina Juuti</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Musselburgh_Hat_for_car_knitting_ca2149d7.jpg" alt="Musselburgh Hat for car knitting" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Musselburgh Hat for car knitting</h3>
+          <p class="project-date">March 2025</p>
+          <p class="project-yarn">Hypnotic Yarn Plush Sock - 2021-11 Apple crisp</p>
+          <p class="project-grams">84g</p>
+          <p class="project-pattern">Musselburgh Hat</p>
+          <p class="project-designer">by Ysolda Teague</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Solverv_Shawl_for_Helena_cb30a51e.jpg" alt="Solverv Shawl for Helena" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Solverv Shawl for Helena</h3>
+          <p class="project-date">March 2025</p>
+          <p class="project-yarn">Tukuwool Tukuwool Fingering H27 Tyyni</p>
+          <p class="project-grams">172g</p>
+          <p class="project-pattern">Solverv Shawl</p>
+          <p class="project-designer">by Skeindeer Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Paris_Market_Quilt_-_Throw_ac3363ea.jpg" alt="Paris Market Quilt - Throw" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Paris Market Quilt - Throw</h3>
+          <p class="project-date">February 2025</p>
+          
+          
+          <p class="project-pattern">Paris Market Quilt</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Paris_Market_Quilt_-_Baby_3c471c61.jpg" alt="Paris Market Quilt - Baby" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Paris Market Quilt - Baby</h3>
+          <p class="project-date">February 2025</p>
+          
+          
+          <p class="project-pattern">Paris Market Quilt</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Cowl_Swatch_9d668709.jpg" alt="Cowl/Swatch" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Cowl/Swatch</h3>
+          <p class="project-date">February 2025</p>
+          <p class="project-yarn">The Woolly Thistle Rambler Pine</p>
+          <p class="project-grams">65g</p>
+          <p class="project-pattern">Mistake Rib Cowl</p>
+          <p class="project-designer">by Jake Canton</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Emotional_Support_Chicken_-_Henelope_f2126f5f.jpg" alt="Emotional Support Chicken - Henelope" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Emotional Support Chicken - Henelope</h3>
+          <p class="project-date">February 2025</p>
+          <p class="project-yarn">Istex Léttlopi 0085 Oatmeal Heather</p>
+          <p class="project-grams">103g</p>
+          <p class="project-pattern">Emotional Support Chicken</p>
+          <p class="project-designer">by Annette Corsino</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Simple_Rib_Hat_for_baby_Rhoades_204e3711.jpg" alt="Simple Rib Hat for baby Rhoades" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Simple Rib Hat for baby Rhoades</h3>
+          <p class="project-date">February 2025</p>
+          <p class="project-yarn">Oink Pigments Mystic Ravin Claw</p>
+          <p class="project-grams">33g</p>
+          <p class="project-pattern">Mikki DK Simple Rib Hat</p>
+          <p class="project-designer">by Linda Whaley</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Aloft_Shawl_for_Helena_6dd37bc0.jpg" alt="Aloft Shawl for Helena" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Aloft Shawl for Helena</h3>
+          <p class="project-date">January 2025</p>
+          <p class="project-yarn">Tukuwool Tukuwool Fingering H27 Tyyni</p>
+          <p class="project-grams">298g</p>
+          <p class="project-pattern">Aloft Shawl</p>
+          <p class="project-designer">by Bekah Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Ball_sock_gauge_swatch_-_Rambler_c8ba7a31.jpg" alt="Ball sock gauge swatch - Rambler" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Ball sock gauge swatch - Rambler</h3>
+          <p class="project-date">January 2025</p>
+          <p class="project-yarn">The Woolly Thistle Rambler Pine</p>
+          <p class="project-grams">12g</p>
+          <p class="project-pattern">Ball sock</p>
+          <p class="project-designer">by Mandy Henderson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Strawberry_pouch_99b967b4.jpg" alt="Strawberry pouch" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Strawberry pouch</h3>
+          <p class="project-date">January 2025</p>
+          
+          
+          <p class="project-pattern">Strawberry pouch</p>
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Patchwork_Duffle_Mini_-_black_and_white_b9a48708.jpg" alt="Patchwork Duffle Mini - black and white" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Patchwork Duffle Mini - black and white</h3>
+          <p class="project-date">January 2025</p>
+          
+          
+          <p class="project-pattern">Patchwork Duffle Mini</p>
+          <p class="project-designer">by Kaitlyn</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Esme_project_bag_-_Knitting_canvas_-_XL_ac8a76dc.jpg" alt="Esme project bag - Knitting canvas - XL" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Esme project bag - Knitting canvas - XL</h3>
+          <p class="project-date">December 2024</p>
+          
+          
+          <p class="project-pattern">Esme Project Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Patchwork_Duffle_Mini_-_blue_and_orange_2cd137bb.jpg" alt="Patchwork Duffle Mini - blue and orange" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Patchwork Duffle Mini - blue and orange</h3>
+          <p class="project-date">December 2024</p>
+          
+          
+          <p class="project-pattern">Patchwork Duffle Mini</p>
+          <p class="project-designer">by Kaitlyn</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Hot_Water_Bottle_Cover_for_Sam_a1c8dffe.jpg" alt="Hot Water Bottle Cover for Sam" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Hot Water Bottle Cover for Sam</h3>
+          <p class="project-date">December 2024</p>
+          <p class="project-yarn">KnitPicks Wonderfluff Atlantic Heather #ZL04</p>
+          <p class="project-grams">49g</p>
+          <p class="project-pattern">All You Need - A Classic</p>
+          <p class="project-designer">by LondonLeo</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Rustic_Red_One_Hat_for_Pasi_65cf15a5.jpg" alt="Rustic Red One Hat for Pasi" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Rustic Red One Hat for Pasi</h3>
+          <p class="project-date">December 2024</p>
+          <p class="project-yarn">KnitPicks Wool of the Andes Tweed Picket Fence Heather</p>
+          <p class="project-grams">97g</p>
+          <p class="project-pattern">Rustic Red One Hat</p>
+          <p class="project-designer">by Jessica Spiegel</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Rustic_Red_One_Hat_for_Mati_aee207ec.jpg" alt="Rustic Red One Hat for Mati" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Rustic Red One Hat for Mati</h3>
+          <p class="project-date">December 2024</p>
+          <p class="project-yarn">KnitPicks Wool of the Andes Tweed Picket Fence Heather</p>
+          <p class="project-grams">92g</p>
+          <p class="project-pattern">Rustic Red One Hat</p>
+          <p class="project-designer">by Jessica Spiegel</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Rustic_Red_One_Hat_for_Emma_Singleton_6523a314.jpg" alt="Rustic Red One Hat for Emma Singleton" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Rustic Red One Hat for Emma Singleton</h3>
+          <p class="project-date">December 2024</p>
+          <p class="project-yarn">KnitPicks Wool of the Andes Tweed Gingham Heather</p>
+          <p class="project-grams">80g</p>
+          <p class="project-pattern">Rustic Red One Hat</p>
+          <p class="project-designer">by Jessica Spiegel</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Rustic_Red_One_Hat_for_Nora_Singleton_802584d9.jpg" alt="Rustic Red One Hat for Nora Singleton" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Rustic Red One Hat for Nora Singleton</h3>
+          <p class="project-date">December 2024</p>
+          <p class="project-yarn">KnitPicks Wool of the Andes Tweed Gingham Heather</p>
+          <p class="project-grams">64g</p>
+          <p class="project-pattern">Rustic Red One Hat</p>
+          <p class="project-designer">by Jessica Spiegel</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Musselsburgh_Hat_-_DK_af81c492.jpg" alt="Musselsburgh Hat - DK" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Musselsburgh Hat - DK</h3>
+          <p class="project-date">December 2024</p>
+          <p class="project-yarn">baa ram ewe (Knit Picks) Woodnote DK Mouse</p>
+          <p class="project-grams">110g</p>
+          <p class="project-pattern">Musselburgh Hat</p>
+          <p class="project-designer">by Ysolda Teague</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Watch_Hat_for_Pete_968b4d42.jpg" alt="Watch Hat for Pete" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Watch Hat for Pete</h3>
+          <p class="project-date">December 2024</p>
+          <p class="project-yarn">Lana Gatto Maxi Soft A3088 Pump Pink</p>
+          <p class="project-grams">115g</p>
+          <p class="project-pattern">Watch Cap & Mitts</p>
+          <p class="project-designer">by Jake Canton</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Barley_Hat_for_Ronia_8824cf6d.jpg" alt="Barley Hat for Ronia" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Barley Hat for Ronia</h3>
+          <p class="project-date">December 2024</p>
+          <p class="project-yarn">baa ram ewe (Knit Picks) Woodnote DK Mouse</p>
+          <p class="project-grams">34g</p>
+          <p class="project-pattern">Barley Hat DK</p>
+          <p class="project-designer">by Tin Can Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Esme_project_bag_-_Marimekko_1cf9759b.jpg" alt="Esme project bag - Marimekko" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Esme project bag - Marimekko</h3>
+          <p class="project-date">November 2024</p>
+          
+          
+          <p class="project-pattern">Esme Project Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tuku_sweater_d98d70f7.jpg" alt="Tuku sweater" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tuku sweater</h3>
+          <p class="project-date">November 2024</p>
+          <p class="project-yarn">Tukuwool Tukuwool DK H20 Hohka</p>
+          <p class="project-grams">402g</p>
+          <p class="project-pattern">Tuku</p>
+          <p class="project-designer">by petiteknitter</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Classic_Ribbed_Hat_for_Sharon_f8d1ec91.jpg" alt="Classic Ribbed Hat for Sharon" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Classic Ribbed Hat for Sharon</h3>
+          <p class="project-date">November 2024</p>
+          <p class="project-yarn">Sirdar Snuggly S cmsdk 0304</p>
+          <p class="project-grams">79g</p>
+          <p class="project-pattern">Classic Ribbed Hat</p>
+          <p class="project-designer">by Jake Canton</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Cobblestone_Cardigan_for_Pasi_9532dbc9.jpg" alt="Cobblestone Cardigan for Pasi" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Cobblestone Cardigan for Pasi</h3>
+          <p class="project-date">October 2024</p>
+          <p class="project-yarn">Novita 7 Veljestä 60 Sand</p>
+          <p class="project-grams">739g</p>
+          <p class="project-pattern">Cobblestone Cardigan</p>
+          <p class="project-designer">by Jared Flood</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Barley_Hat_for_Willis_twin_4d41cd2b.jpg" alt="Barley Hat for Willis twin" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Barley Hat for Willis twin</h3>
+          <p class="project-date">October 2024</p>
+          <p class="project-yarn">KnitPicks Swish Hollyberry</p>
+          <p class="project-grams">38g</p>
+          <p class="project-pattern">Barley Hat DK</p>
+          <p class="project-designer">by Tin Can Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Bean_and_Olive_sweater_-_purple_98a7de2e.jpg" alt="Bean and Olive sweater - purple" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Bean and Olive sweater - purple</h3>
+          <p class="project-date">October 2024</p>
+          <p class="project-yarn">KnitPicks Swish Haze Heather</p>
+          <p class="project-grams">171g</p>
+          <p class="project-pattern">Bean and Olive sweater</p>
+          <p class="project-designer">by Andrea Mowry</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Bean_and_Olive_sweater_-_pink_bb4ed1a4.jpg" alt="Bean and Olive sweater - pink" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Bean and Olive sweater - pink</h3>
+          <p class="project-date">September 2024</p>
+          <p class="project-yarn">KnitPicks Swish Hollyberry</p>
+          <p class="project-grams">171g</p>
+          <p class="project-pattern">Bean and Olive sweater</p>
+          <p class="project-designer">by Andrea Mowry</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Hair_band__1_d63b7cd2.jpg" alt="Hair band #1" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Hair band #1</h3>
+          <p class="project-date">September 2024</p>
+          <p class="project-yarn">baa ram ewe (Knit Picks) Woodnote DK Mouse</p>
+          <p class="project-grams">17g</p>
+          <p class="project-pattern">Beak's hair bands</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Hair_band__2_b01ded77.jpg" alt="Hair band #2" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Hair band #2</h3>
+          <p class="project-date">September 2024</p>
+          <p class="project-yarn">baa ram ewe (Knit Picks) Woodnote DK Mouse</p>
+          <p class="project-grams">15g</p>
+          <p class="project-pattern">Beak's hair bands</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Barley_Hat_for_Willis_twin_526b9e51.jpg" alt="Barley Hat for Willis twin" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Barley Hat for Willis twin</h3>
+          <p class="project-date">September 2024</p>
+          <p class="project-yarn">KnitPicks Swish Hollyberry</p>
+          <p class="project-grams">33g</p>
+          <p class="project-pattern">Barley Hat DK</p>
+          <p class="project-designer">by Tin Can Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Linen_bread_bag_abacb652.jpg" alt="Linen bread bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Linen bread bag</h3>
+          <p class="project-date">August 2024</p>
+          
+          
+          <p class="project-pattern">Reversible Drawstring Bag</p>
+          <p class="project-designer">by Tara Reed</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Patchwork_zippered_pouch_f6a7f136.jpg" alt="Patchwork zippered pouch" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Patchwork zippered pouch</h3>
+          <p class="project-date">August 2024</p>
+          
+          
+          <p class="project-pattern">Zippered Pouch</p>
+          <p class="project-designer">by Rosie's Art Studio</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Mom_s_stash_reversible_drawstring_bag_66ec3177.jpg" alt="Mom's stash reversible drawstring bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Mom's stash reversible drawstring bag</h3>
+          <p class="project-date">August 2024</p>
+          
+          
+          <p class="project-pattern">Reversible Drawstring Bag</p>
+          <p class="project-designer">by Tara Reed</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Storm_Sweater_for_Beak_a8b2096d.jpg" alt="Storm Sweater for Beak" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Storm Sweater for Beak</h3>
+          <p class="project-date">August 2024</p>
+          <p class="project-yarn">baa ram ewe (Knit Picks) Woodnote DK Mouse</p>
+          <p class="project-grams">509g</p>
+          <p class="project-pattern">Storm Sweater</p>
+          <p class="project-designer">by PetiteKnit, Mette Wendelboe Okkels</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Patriotic_reversible_drawstring_bags_1e8aade0.jpg" alt="Patriotic reversible drawstring bags" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Patriotic reversible drawstring bags</h3>
+          <p class="project-date">July 2024</p>
+          
+          
+          <p class="project-pattern">Reversible Drawstring Bag</p>
+          <p class="project-designer">by Tara Reed</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Magic_Hat_for_Emma_0aa2ddbe.jpg" alt="Magic Hat for Emma" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Magic Hat for Emma</h3>
+          <p class="project-date">June 2024</p>
+          <p class="project-yarn">Retrosaria Mondim 205 Speckle</p>
+          <p class="project-grams">49g</p>
+          <p class="project-pattern">Magic Hat</p>
+          <p class="project-designer">by P is for Parsnip</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Skimmer_socks_Mondim_16e4316d.jpg" alt="Skimmer socks Mondim" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Skimmer socks Mondim</h3>
+          <p class="project-date">June 2024</p>
+          <p class="project-yarn">Retrosaria Mondim 205 Speckle</p>
+          <p class="project-grams">40g</p>
+          <p class="project-pattern">Skimmer Socks revisited v3</p>
+          <p class="project-designer">by Sheila Toy Stromberg</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Vanilla_Sweater_for_Jenna_c5bd4267.jpg" alt="Vanilla Sweater for Jenna" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Vanilla Sweater for Jenna</h3>
+          <p class="project-date">June 2024</p>
+          <p class="project-yarn">Rauma Finull 0465</p>
+          <p class="project-grams">298g</p>
+          <p class="project-pattern">Vanilla Sweater</p>
+          <p class="project-designer">by Corinne Tomlinson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Spa_Day_Dishcloth_7fed821b.jpg" alt="Spa Day Dishcloth" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Spa Day Dishcloth</h3>
+          <p class="project-date">May 2024</p>
+          <p class="project-yarn">KnitPicks Simply Cotton Organic Fingering Simply Cotton Fingering #80</p>
+          <p class="project-grams">203g</p>
+          <p class="project-pattern">Spa Day Facecloth</p>
+          <p class="project-designer">by Anne Mancine</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Spa_Day_Facecloth__4_f6bd0c55.jpg" alt="Spa Day Facecloth #4" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Spa Day Facecloth #4</h3>
+          <p class="project-date">May 2024</p>
+          <p class="project-yarn">KnitPicks Simply Cotton Organic Fingering Simply Cotton Fingering #80</p>
+          <p class="project-grams">45g</p>
+          <p class="project-pattern">Spa Day Facecloth</p>
+          <p class="project-designer">by Anne Mancine</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Spa_Day_Facecloth__3_487339e3.jpg" alt="Spa Day Facecloth #3" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Spa Day Facecloth #3</h3>
+          <p class="project-date">April 2024</p>
+          <p class="project-yarn">KnitPicks Simply Cotton Organic Fingering Simply Cotton Fingering #80</p>
+          <p class="project-grams">45g</p>
+          <p class="project-pattern">Spa Day Facecloth</p>
+          <p class="project-designer">by Anne Mancine</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Spa_Day_Facecloth__2_bb375ff8.jpg" alt="Spa Day Facecloth #2" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Spa Day Facecloth #2</h3>
+          <p class="project-date">April 2024</p>
+          <p class="project-yarn">KnitPicks Simply Cotton Organic Fingering Simply Cotton Fingering #80</p>
+          <p class="project-grams">42g</p>
+          <p class="project-pattern">Spa Day Facecloth</p>
+          <p class="project-designer">by Anne Mancine</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Spa_Day_Facecloth__1_d9a62424.jpg" alt="Spa Day Facecloth #1" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Spa Day Facecloth #1</h3>
+          <p class="project-date">April 2024</p>
+          <p class="project-yarn">KnitPicks Simply Cotton Organic Fingering Simply Cotton Fingering #80</p>
+          <p class="project-grams">42g</p>
+          <p class="project-pattern">Spa Day Facecloth</p>
+          <p class="project-designer">by Anne Mancine</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Easy_Shawlette_bfbdb42a.jpg" alt="Easy Shawlette" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Easy Shawlette</h3>
+          <p class="project-date">April 2024</p>
+          <p class="project-yarn">Hypnotic Yarn Plush Sock - 2021-07 Summer Vibes</p>
+          <p class="project-grams">98g</p>
+          <p class="project-pattern">Easy shawlette</p>
+          <p class="project-designer">by Martina Behm</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Musselburgh_Hat_-_blue_2bd2c82e.jpg" alt="Musselburgh Hat - blue" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Musselburgh Hat - blue</h3>
+          <p class="project-date">April 2024</p>
+          <p class="project-yarn">dreamincoloryarn.com Smooshy with Cashmere Malibu Sail 12</p>
+          <p class="project-grams">100g</p>
+          <p class="project-pattern">Musselburgh Hat</p>
+          <p class="project-designer">by Ysolda Teague</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Storm_Sweater_Baby_for_Emma_e83ad02d.jpg" alt="Storm Sweater Baby for Emma" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Storm Sweater Baby for Emma</h3>
+          <p class="project-date">April 2024</p>
+          <p class="project-yarn">Rauma Finull 4571</p>
+          <p class="project-grams">193g</p>
+          <p class="project-pattern">Storm Sweater Baby</p>
+          <p class="project-designer">by PetiteKnit, Mette Wendelboe Okkels</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Storm_Sweater_Baby_for_Nora_b88eec90.jpg" alt="Storm Sweater Baby for Nora" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Storm Sweater Baby for Nora</h3>
+          <p class="project-date">March 2024</p>
+          <p class="project-yarn">Rauma Finull 4094</p>
+          <p class="project-grams">108g</p>
+          <p class="project-pattern">Storm Sweater Baby</p>
+          <p class="project-designer">by PetiteKnit, Mette Wendelboe Okkels</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tolsta_Tee_-_Long_Sleeve_3fbcb4cd.jpg" alt="Tolsta Tee - Long Sleeve" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tolsta Tee - Long Sleeve</h3>
+          <p class="project-date">January 2024</p>
+          <p class="project-yarn">Istex Léttlopi 1706</p>
+          <p class="project-grams">341g</p>
+          <p class="project-pattern">Tolsta Tee</p>
+          <p class="project-designer">by Rebecca Clow</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Half_and_Half_Triangle_Wrap_bd137703.jpg" alt="Half and Half Triangle Wrap" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Half and Half Triangle Wrap</h3>
+          <p class="project-date">December 2023</p>
+          <p class="project-yarn">Purl Soho Linen Quill Stillwater Blue</p>
+          <p class="project-grams">518g</p>
+          <p class="project-pattern">Half and Half Wrap</p>
+          <p class="project-designer">by Jake Canton</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/On_the_C_Train_x3_for_Abby_9ec1e646.jpg" alt="On the C Train x3 for Abby" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">On the C Train x3 for Abby</h3>
+          <p class="project-date">December 2023</p>
+          <p class="project-yarn">Peace Fleece Peace Fleece Worsted Antartic White</p>
+          <p class="project-grams">96g</p>
+          <p class="project-pattern">On the C Train</p>
+          <p class="project-designer">by Espace Tricot</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/On_the_C_Train_x2_for_Helena_e7c5d18c.jpg" alt="On the C Train x2 for Helena" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">On the C Train x2 for Helena</h3>
+          <p class="project-date">December 2023</p>
+          <p class="project-yarn">Peace Fleece Peace Fleece Worsted Antartic White</p>
+          <p class="project-grams">94g</p>
+          <p class="project-pattern">On the C Train</p>
+          <p class="project-designer">by Espace Tricot</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/On_the_C_Train_for_Pete_34378e29.jpg" alt="On the C Train for Pete" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">On the C Train for Pete</h3>
+          <p class="project-date">November 2023</p>
+          <p class="project-yarn">Peace Fleece Peace Fleece Worsted Antartic White</p>
+          <p class="project-grams">94g</p>
+          <p class="project-pattern">On the C Train</p>
+          <p class="project-designer">by Espace Tricot</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/LOSY_hat_for_Pete_to_match_Riddari_98c49908.jpg" alt="LOSY hat for Pete to match Riddari" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">LOSY hat for Pete to match Riddari</h3>
+          <p class="project-date">November 2023</p>
+          <p class="project-yarn">West Yorkshire Spinners (WYS) West Yorkshire Spinners Signature 4 ply Yarn Bullfinch</p>
+          <p class="project-grams">60g</p>
+          <p class="project-pattern">LOSY Hat</p>
+          <p class="project-designer">by Barb Engelking</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Riddari_389e5447.jpg" alt="Riddari" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Riddari</h3>
+          <p class="project-date">November 2023</p>
+          <p class="project-yarn">Istex Léttlopi 0054 ash heather</p>
+          <p class="project-grams">548g</p>
+          <p class="project-pattern">Riddari</p>
+          <p class="project-designer">by Istex Lopi</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Robe_3c6c7673.jpg" alt="Robe" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Robe</h3>
+          <p class="project-date">September 2023</p>
+          
+          
+          <p class="project-pattern">Bathrobe</p>
+          <p class="project-designer">by Tessuti Fabrics</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Eye_makeup_removers_88a5ed53.jpg" alt="Eye makeup removers" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Eye makeup removers</h3>
+          <p class="project-date">September 2023</p>
+          <p class="project-yarn">KnitPicks Comfy Worsted Hydrangea #8056</p>
+          <p class="project-grams">14g</p>
+          <p class="project-pattern">Eye makeup removers</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Wedding_skirt_eef51831.jpg" alt="Wedding skirt" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Wedding skirt</h3>
+          <p class="project-date">August 2023</p>
+          
+          
+          <p class="project-pattern">A Line Skirt</p>
+          <p class="project-designer">by Tessuti Fabrics</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Italian_scarf_5e03961e.jpg" alt="Italian scarf" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Italian scarf</h3>
+          <p class="project-date">July 2023</p>
+          <p class="project-yarn">Istex Léttlopi 1703 Mimosa</p>
+          <p class="project-grams">190g</p>
+          <p class="project-pattern">An Italian Summer Scarf</p>
+          <p class="project-designer">by Francesca Guiducci</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Slytherin_Scarf_6372de60.jpg" alt="Slytherin Scarf" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Slytherin Scarf</h3>
+          <p class="project-date">July 2023</p>
+          <p class="project-yarn">KnitPicks Wool of the Andes Worsted Aurora Heather</p>
+          <p class="project-grams">272g</p>
+          <p class="project-pattern">Harry Potter scarf pattern</p>
+          <p class="project-designer">by Alison Hansel</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Tolsta_Tee_bf4c9671.jpg" alt="Tolsta Tee" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Tolsta Tee</h3>
+          <p class="project-date">July 2023</p>
+          <p class="project-yarn">KnitPicks Woolen Cotton Bare #B0</p>
+          <p class="project-grams">292g</p>
+          <p class="project-pattern">Tolsta Tee</p>
+          <p class="project-designer">by Rebecca Clow</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Steinkriger_3cd5f8f6.jpg" alt="Steinkriger" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Steinkriger</h3>
+          <p class="project-date">June 2023</p>
+          <p class="project-yarn">Istex Léttlopi 9420 Navy Blue</p>
+          <p class="project-grams">742g</p>
+          <p class="project-pattern">Steinkriger</p>
+          <p class="project-designer">by Katrine Hammer</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Stormy_Sky_Shawl_f04c96ed.jpg" alt="Stormy Sky Shawl" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Stormy Sky Shawl</h3>
+          <p class="project-date">June 2023</p>
+          <p class="project-yarn">Biches & Buches Le Petit Lambswool norwegian red</p>
+          <p class="project-grams">98g</p>
+          <p class="project-pattern">Stormy Sky Shawl</p>
+          <p class="project-designer">by Ksenia Naidyon</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Houlland_Hap_9e8e6d08.jpg" alt="Houlland Hap" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Houlland Hap</h3>
+          <p class="project-date">May 2023</p>
+          <p class="project-yarn">Jamieson & Smith 2 ply Lace Weight L62 mix</p>
+          <p class="project-grams">90g</p>
+          <p class="project-pattern">Houlland Hap</p>
+          <p class="project-designer">by Donna Smith</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/DK_Vanilla_Socks_91ee22b6.jpg" alt="DK Vanilla Socks" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">DK Vanilla Socks</h3>
+          <p class="project-date">April 2023</p>
+          <p class="project-yarn">Ilo Yarn Taivaanrantayarn Mari DK</p>
+          <p class="project-grams">91g</p>
+          <p class="project-pattern">DK Vanilla Socks</p>
+          <p class="project-designer">by Crazy Sock Lady Designs</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/T_shirt_quilt_for_Mati_f9a39097.jpg" alt="T shirt quilt for Mati" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">T shirt quilt for Mati</h3>
+          <p class="project-date">April 2023</p>
+          
+          
+          <p class="project-pattern">Collage style t shirt quilt</p>
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Black__White___Red_Quilt_8395ab67.jpg" alt="Black, White & Red Quilt" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Black, White & Red Quilt</h3>
+          <p class="project-date">March 2023</p>
+          
+          
+          <p class="project-pattern">Black, white and red quilt</p>
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Vanilla_Sweater_-_Temple_Edition_4e79c534.jpg" alt="Vanilla Sweater - Temple Edition" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Vanilla Sweater - Temple Edition</h3>
+          <p class="project-date">March 2023</p>
+          <p class="project-yarn">KnitPicks Palette White #9437</p>
+          <p class="project-grams">208g</p>
+          <p class="project-pattern">Vanilla Sweater</p>
+          <p class="project-designer">by Corinne Tomlinson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Free_Range_Slacks_88f7e2c1.jpg" alt="Free Range Slacks" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Free Range Slacks</h3>
+          <p class="project-date">February 2023</p>
+          
+          
+          <p class="project-pattern">Free Range Slacks</p>
+          <p class="project-designer">by Sew House Seven</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/World_s_Simplest_Mittens_-_Fingerless_Mitts_75f56bee.jpg" alt="World's Simplest Mittens - Fingerless Mitts" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">World's Simplest Mittens - Fingerless Mitts</h3>
+          <p class="project-date">February 2023</p>
+          <p class="project-yarn">Istex Léttlopi 0005 Black heather</p>
+          <p class="project-grams">39g</p>
+          <p class="project-pattern">World's Simplest Mittens</p>
+          <p class="project-designer">by Tin Can Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/December_Bow_987b777b.jpg" alt="December Bow" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">December Bow</h3>
+          <p class="project-date">January 2023</p>
+          <p class="project-yarn">KnitPicks Brava sport Wine</p>
+          <p class="project-grams">35g</p>
+          <p class="project-pattern">December Bow</p>
+          <p class="project-designer">by PetiteKnit, Mette Wendelboe Okkels</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Great_Love_Cardigan_f8c829fa.jpg" alt="Great Love Cardigan" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Great Love Cardigan</h3>
+          <p class="project-date">January 2023</p>
+          <p class="project-yarn">Istex Léttlopi 0005 Black heather</p>
+          <p class="project-grams">613g</p>
+          <p class="project-pattern">Great Love</p>
+          <p class="project-designer">by ANKESTRiCK</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Wonder_Woman_Wrap_78da5ad9.jpg" alt="Wonder Woman Wrap" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Wonder Woman Wrap</h3>
+          <p class="project-date">January 2023</p>
+          <p class="project-yarn">KnitPicks Palette Semolina #6420</p>
+          <p class="project-grams">150g</p>
+          <p class="project-pattern">Wonder Woman Wrap</p>
+          <p class="project-designer">by Carissa Browning</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Garter_Squish_Blanket_e346f352.jpg" alt="Garter Squish Blanket" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Garter Squish Blanket</h3>
+          <p class="project-date">December 2022</p>
+          <p class="project-yarn">KnitPicks Brava sport Denim</p>
+          <p class="project-grams">1950g</p>
+          <p class="project-pattern">Garter Squish Blanket</p>
+          <p class="project-designer">by Stephen West</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Turn_a_Square_Hat_0367ca32.jpg" alt="Turn a Square Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Turn a Square Hat</h3>
+          <p class="project-date">December 2022</p>
+          <p class="project-yarn">Brooklyn Tweed Shelter Sweatshirt</p>
+          <p class="project-grams">34g</p>
+          <p class="project-pattern">Turn a Square Hat</p>
+          <p class="project-designer">by Jared Flood</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Roxy_Dress_for_Emma_df34eb14.jpg" alt="Roxy Dress for Emma" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Roxy Dress for Emma</h3>
+          <p class="project-date">November 2022</p>
+          <p class="project-yarn">Knitting for Olive Knitting for Olive Merino Artichoke Purple</p>
+          <p class="project-grams">133g</p>
+          <p class="project-pattern">Roxy Dress</p>
+          <p class="project-designer">by Knitting For Olive</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Barkley_Sweater_26df7972.jpg" alt="Barkley Sweater" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Barkley Sweater</h3>
+          <p class="project-date">November 2022</p>
+          
+          
+          <p class="project-pattern">Dog Sweater</p>
+          <p class="project-designer">by Sew What Alicia</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Hen_Sweater_d3ece131.jpg" alt="Hen Sweater" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Hen Sweater</h3>
+          <p class="project-date">November 2022</p>
+          <p class="project-yarn">KnitPicks Brava sport Solstice Heather</p>
+          <p class="project-grams">15g</p>
+          <p class="project-pattern">Hen Sweater</p>
+          <p class="project-designer">by Little Hen Rescue</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Jersey_Dress_c46e9c22.jpg" alt="Jersey Dress" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Jersey Dress</h3>
+          <p class="project-date">November 2022</p>
+          
+          
+          <p class="project-pattern">Jersey Dress</p>
+          <p class="project-designer">by In the Fold</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Small_Zippered_Pouch_bbf0706a.jpg" alt="Small Zippered Pouch" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Small Zippered Pouch</h3>
+          <p class="project-date">November 2022</p>
+          
+          
+          <p class="project-pattern">Zippered Pouch</p>
+          <p class="project-designer">by Rosie's Art Studio</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/T-Shirt_088af372.jpg" alt="T-Shirt" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">T-Shirt</h3>
+          <p class="project-date">November 2022</p>
+          
+          
+          <p class="project-pattern">T-Shirt</p>
+          <p class="project-designer">by Closet Core Patterns</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Comfort_Socks_5445e42e.jpg" alt="Comfort Socks" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Comfort Socks</h3>
+          <p class="project-date">November 2022</p>
+          <p class="project-yarn">Istex Léttlopi 1412 Pink Heather</p>
+          <p class="project-grams">83g</p>
+          <p class="project-pattern">Comfort Socks</p>
+          <p class="project-designer">by Ozetta</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Sip_Hat_3dc4082b.jpg" alt="Sip Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Sip Hat</h3>
+          <p class="project-date">November 2022</p>
+          <p class="project-yarn">Uradale Yarns Jumper Weight Juniper Heath</p>
+          <p class="project-grams">31g</p>
+          <p class="project-pattern">Sip Hat</p>
+          <p class="project-designer">by Stephanie Lotven</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Northcote_Knit_Skirt_9b8c1f86.jpg" alt="Northcote Knit Skirt" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Northcote Knit Skirt</h3>
+          <p class="project-date">November 2022</p>
+          
+          
+          <p class="project-pattern">Northcote Knit Skirt</p>
+          <p class="project-designer">by StyleArc</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Learn_colorwork__4_-_Ingrid_Fingerless_Mitts_691f643a.jpg" alt="Learn colorwork #4 - Ingrid Fingerless Mitts" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Learn colorwork #4 - Ingrid Fingerless Mitts</h3>
+          <p class="project-date">November 2022</p>
+          <p class="project-yarn">KnitPicks Swish Rainforest Heather</p>
+          <p class="project-grams">104g</p>
+          <p class="project-pattern">Ingrid Fingerless Mitts</p>
+          <p class="project-designer">by Kristin Drysdale</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Learn_colorwork__3_-_Dagna_hat_cdb07265.jpg" alt="Learn colorwork #3 - Dagna hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Learn colorwork #3 - Dagna hat</h3>
+          <p class="project-date">November 2022</p>
+          <p class="project-yarn">KnitPicks Swish Rainforest Heather</p>
+          <p class="project-grams">55g</p>
+          <p class="project-pattern">Dagna Hat</p>
+          <p class="project-designer">by Kristin Drysdale</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Juist_No2_e144a48d.jpg" alt="Juist No2" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Juist No2</h3>
+          <p class="project-date">October 2022</p>
+          <p class="project-yarn">KnitPicks Wonderfluff Cobblestone Heather #ZG06</p>
+          <p class="project-grams">250g</p>
+          <p class="project-pattern">Juist No2</p>
+          <p class="project-designer">by ANKESTRiCK</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Learn_colorwork__2_-_Freja_Hat_838ab8ca.jpg" alt="Learn colorwork #2 - Freja Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Learn colorwork #2 - Freja Hat</h3>
+          <p class="project-date">October 2022</p>
+          <p class="project-yarn">The Birlinn Yarn Company From Seafaring Sheep 4 ply Hebridean Yarn shillay</p>
+          <p class="project-grams">42g</p>
+          <p class="project-pattern">Freja Hat</p>
+          <p class="project-designer">by Kristin Drysdale</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Kelley_Baby_Present_sweater_5138f815.jpg" alt="Kelley Baby Present sweater" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Kelley Baby Present sweater</h3>
+          <p class="project-date">September 2022</p>
+          <p class="project-yarn">KnitPicks Brava sport Marina</p>
+          <p class="project-grams">83g</p>
+          <p class="project-pattern">Flax/FlaxLight</p>
+          <p class="project-designer">by Tin Can Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Kelley_Baby_Present_hats_6df321d1.jpg" alt="Kelley Baby Present hats" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Kelley Baby Present hats</h3>
+          <p class="project-date">September 2022</p>
+          <p class="project-yarn">Oink Pigments Mystic Ravin Claw</p>
+          <p class="project-grams">101g</p>
+          <p class="project-pattern">Suzette Beanie</p>
+          <p class="project-designer">by Ginger & Thyme</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Temple_dress_cover_0abc1bf4.jpg" alt="Temple dress cover" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Temple dress cover</h3>
+          <p class="project-date">September 2022</p>
+          
+          
+          <p class="project-pattern">Dress cover/Garment bag</p>
+          <p class="project-designer">by Leimomi Oakes</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Temple_dress_b9591807.jpg" alt="Temple dress" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Temple dress</h3>
+          <p class="project-date">September 2022</p>
+          
+          
+          <p class="project-pattern">Felicia Pinafore Dress</p>
+          <p class="project-designer">by Tessuti Fabrics</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Stria_Hat_for_Pete_e9d3142c.jpg" alt="Stria Hat for Pete" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Stria Hat for Pete</h3>
+          <p class="project-date">August 2022</p>
+          <p class="project-yarn">KnitPicks Hawthorne Tonal Hand Paint Springfield Hawthorne Tonal Hand Paint</p>
+          <p class="project-grams">60g</p>
+          <p class="project-pattern">Stria Hat</p>
+          <p class="project-designer">by Andrea Mowry</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Chunky_Ibo_pillow__1_69a47064.jpg" alt="Chunky Ibo pillow #1" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Chunky Ibo pillow #1</h3>
+          <p class="project-date">August 2022</p>
+          <p class="project-yarn">KnitPicks Wonderfluff Hare Heather #ZG03</p>
+          <p class="project-grams">50g</p>
+          <p class="project-pattern">Chunky Ibo Pillow</p>
+          <p class="project-designer">by Heidi Bang</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Chunky_Ibo_pillow__2_69a47064.jpg" alt="Chunky Ibo pillow #2" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Chunky Ibo pillow #2</h3>
+          <p class="project-date">August 2022</p>
+          <p class="project-yarn">KnitPicks Wonderfluff Bare #B0</p>
+          <p class="project-grams">50g</p>
+          <p class="project-pattern">Chunky Ibo Pillow</p>
+          <p class="project-designer">by Heidi Bang</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Chunky_Ibo_pillow__3_69a47064.jpg" alt="Chunky Ibo pillow #3" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Chunky Ibo pillow #3</h3>
+          <p class="project-date">August 2022</p>
+          <p class="project-yarn">KnitPicks Wonderfluff Moose #ZV06</p>
+          <p class="project-grams">50g</p>
+          <p class="project-pattern">Chunky Ibo Pillow</p>
+          <p class="project-designer">by Heidi Bang</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Knitting_Notions_Pouch_a2e3cd19.jpg" alt="Knitting Notions Pouch" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Knitting Notions Pouch</h3>
+          <p class="project-date">August 2022</p>
+          
+          
+          
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Huggable_Booties_Brava_c143f306.jpg" alt="Huggable Booties Brava" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Huggable Booties Brava</h3>
+          <p class="project-date">August 2022</p>
+          <p class="project-yarn">KnitPicks Brava sport Red</p>
+          <p class="project-grams">24g</p>
+          <p class="project-pattern">Huggable Booties</p>
+          <p class="project-designer">by Cindy S.</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Huggable_Booties_Brava_for_Willises_dc5c09ec.jpg" alt="Huggable Booties Brava for Willises" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Huggable Booties Brava for Willises</h3>
+          <p class="project-date">August 2022</p>
+          <p class="project-yarn">KnitPicks Brava sport Rouge</p>
+          <p class="project-grams">52g</p>
+          <p class="project-pattern">Huggable Booties</p>
+          <p class="project-designer">by Cindy S.</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Willis_baby_preemie_gift_-_hat_5f9249e5.jpg" alt="Willis baby preemie gift - hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Willis baby preemie gift - hat</h3>
+          <p class="project-date">July 2022</p>
+          <p class="project-yarn">KnitPicks Brava sport Rouge</p>
+          <p class="project-grams">42g</p>
+          <p class="project-pattern">Magic Hat</p>
+          <p class="project-designer">by P is for Parsnip</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Soxploration_Shadow_Wrap_Silent_Night_Socks_fe1f18a3.jpg" alt="Soxploration Shadow Wrap Silent Night Socks" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Soxploration Shadow Wrap Silent Night Socks</h3>
+          <p class="project-date">July 2022</p>
+          <p class="project-yarn">West Yorkshire Spinners (WYS) West Yorkshire Spinners Signature 4 ply Yarn, Christmas Special Silent Night</p>
+          <p class="project-grams">63g</p>
+          <p class="project-pattern">Soxploration Shadow Wrap Sock</p>
+          <p class="project-designer">by Denise DeSantis</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Stria_hat_x2_41292565.jpg" alt="Stria hat x2" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Stria hat x2</h3>
+          <p class="project-date">July 2022</p>
+          <p class="project-yarn">Flying Fibers Flock Yarn Bare</p>
+          <p class="project-grams">245g</p>
+          <p class="project-pattern">Stria Hat</p>
+          <p class="project-designer">by Andrea Mowry</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Bayley_Bag_f9c5fb23.jpg" alt="Bayley Bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Bayley Bag</h3>
+          <p class="project-date">July 2022</p>
+          
+          
+          <p class="project-pattern">Bayley Bag</p>
+          <p class="project-designer">by Ithinksew bags</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Anker_s_Summer_Shirt_ec31c80b.jpg" alt="Anker's Summer Shirt" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Anker's Summer Shirt</h3>
+          <p class="project-date">July 2022</p>
+          <p class="project-yarn">Sandnes Garn Tynn Line 6531 Ice Blue</p>
+          <p class="project-grams">269g</p>
+          <p class="project-pattern">Anker's Summer Shirt</p>
+          <p class="project-designer">by PetiteKnit, Mette Wendelboe Okkels</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Lunch_tote_bag_dd129278.jpg" alt="Lunch tote bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Lunch tote bag</h3>
+          <p class="project-date">July 2022</p>
+          
+          
+          <p class="project-pattern">Lunch Tote Bag</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Chunky_Ibo_pillow_sample_3b71d561.jpg" alt="Chunky Ibo pillow sample" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Chunky Ibo pillow sample</h3>
+          <p class="project-date">June 2022</p>
+          <p class="project-yarn">KnitPicks Wonderfluff Atlantic Heather #ZL04</p>
+          <p class="project-grams">50g</p>
+          <p class="project-pattern">Chunky Ibo Pillow</p>
+          <p class="project-designer">by Heidi Bang</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Bindle_bag_3fa8d863.jpg" alt="Bindle bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Bindle bag</h3>
+          <p class="project-date">June 2022</p>
+          <p class="project-yarn">Tukuwool Harmas Noittaa/Light Grey</p>
+          <p class="project-grams">59g</p>
+          <p class="project-pattern">Bindle bag</p>
+          <p class="project-designer">by Ozetta</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Round_Trip_Duffle_61801765.jpg" alt="Round Trip Duffle" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Round Trip Duffle</h3>
+          <p class="project-date">May 2022</p>
+          
+          
+          <p class="project-pattern">Round Trip Duffle</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Warm_Up_Sweater_for_Rachel_ee05a71e.jpg" alt="Warm Up Sweater for Rachel" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Warm Up Sweater for Rachel</h3>
+          <p class="project-date">May 2022</p>
+          <p class="project-yarn">KnitPicks Wonderfluff Atlantic Heather #ZL04</p>
+          <p class="project-grams">279g</p>
+          <p class="project-pattern">Warm Up Sweater</p>
+          <p class="project-designer">by Espace Tricot</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Slip_Stitch_Dishtowels_9549dd96.jpg" alt="Slip Stitch Dishtowels" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Slip Stitch Dishtowels</h3>
+          <p class="project-date">May 2022</p>
+          <p class="project-yarn">Purl Soho Blackbird Linen Trowel Gray #8575</p>
+          <p class="project-grams">162g</p>
+          <p class="project-pattern">Slip Stitch Dishtowels</p>
+          <p class="project-designer">by Purl Soho</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Free_Range_Slacks_a8f3f146.jpg" alt="Free Range Slacks" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Free Range Slacks</h3>
+          <p class="project-date">May 2022</p>
+          
+          
+          <p class="project-pattern">Free Range Slacks</p>
+          <p class="project-designer">by Sew House Seven</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Medvind_0a1b0038.jpg" alt="Medvind" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Medvind</h3>
+          <p class="project-date">May 2022</p>
+          <p class="project-yarn">Frangipani Guernsey Wool 5 Ply Navy</p>
+          <p class="project-grams">633g</p>
+          <p class="project-pattern">Medvind</p>
+          <p class="project-designer">by Elsebeth Judith</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Felicia_Pinafore_Dress_ff8a75e5.jpg" alt="Felicia Pinafore Dress" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Felicia Pinafore Dress</h3>
+          <p class="project-date">April 2022</p>
+          
+          
+          <p class="project-pattern">Felicia Pinafore Dress</p>
+          <p class="project-designer">by Tessuti Fabrics</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Flax_Sweater_15ad3df2.jpg" alt="Flax Sweater" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Flax Sweater</h3>
+          <p class="project-date">March 2022</p>
+          <p class="project-yarn">Ruxville Farm Ruxville Farm Yarn Black</p>
+          <p class="project-grams">171g</p>
+          <p class="project-pattern">Flax/FlaxLight</p>
+          <p class="project-designer">by Tin Can Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Weekend_Slipover_V_Neck_06aed705.jpg" alt="Weekend Slipover V Neck" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Weekend Slipover V Neck</h3>
+          <p class="project-date">March 2022</p>
+          <p class="project-yarn">Peace Fleece Peace Fleece Worsted Antartic White</p>
+          
+          <p class="project-pattern">Weekend Slipover V Neck</p>
+          <p class="project-designer">by PetiteKnit, Mette Wendelboe Okkels</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Water_Lilies_Pullover_06e5194a.jpg" alt="Water Lilies Pullover" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Water Lilies Pullover</h3>
+          <p class="project-date">March 2022</p>
+          <p class="project-yarn">Tukuwool Tukuwool DK H20 Hohka</p>
+          
+          <p class="project-pattern">Water Lilies sweater</p>
+          <p class="project-designer">by Claudia Quintanilla for EweKnit Toronto</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Slade_Cardigan_for_Sam_2021_b2117c26.jpg" alt="Slade Cardigan for Sam 2021" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Slade Cardigan for Sam 2021</h3>
+          <p class="project-date">January 2022</p>
+          <p class="project-yarn">Ruxville Farm Ruxville Farm Yarn Black</p>
+          <p class="project-grams">488g</p>
+          <p class="project-pattern">Slade Cardigan</p>
+          <p class="project-designer">by Michelle Wang</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Goblin_Scarf_2_0_a48dc475.jpg" alt="Goblin Scarf 2.0" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Goblin Scarf 2.0</h3>
+          <p class="project-date">January 2022</p>
+          <p class="project-yarn">Loops & Threads Impeccable Cherry</p>
+          <p class="project-grams">233g</p>
+          <p class="project-pattern">Goblin Scarf</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Christmas_Sweater_for_Pete_2021_17ccef73.jpg" alt="Christmas Sweater for Pete 2021" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Christmas Sweater for Pete 2021</h3>
+          <p class="project-date">December 2021</p>
+          <p class="project-yarn">Brooklyn Tweed Shelter Button Jar</p>
+          <p class="project-grams">399g</p>
+          <p class="project-pattern">Men’s Classic Raglan Pullover</p>
+          <p class="project-designer">by Jane Richmond </p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Watch_Hat_6f341942.jpg" alt="Watch Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Watch Hat</h3>
+          <p class="project-date">December 2021</p>
+          <p class="project-yarn">Stone Wool American Corriedale Artemesia </p>
+          <p class="project-grams">91g</p>
+          <p class="project-pattern">Watch Cap & Mitts</p>
+          <p class="project-designer">by Jake Canton</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Mira_s_Cowl_for_Abby_960b4fb8.jpg" alt="Mira's Cowl for Abby" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Mira's Cowl for Abby</h3>
+          <p class="project-date">December 2021</p>
+          <p class="project-yarn">Julie Asselin Fino Avril</p>
+          <p class="project-grams">97g</p>
+          <p class="project-pattern">Mira's Cowl</p>
+          <p class="project-designer">by Mira Cole</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Christmas_Hat_for_Sam_2021_6b5f272c.jpg" alt="Christmas Hat for Sam 2021" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Christmas Hat for Sam 2021</h3>
+          <p class="project-date">November 2021</p>
+          <p class="project-yarn">Knitting for Olive Knitting for Olive Heavy Merino Dusty Moose</p>
+          <p class="project-grams">76g</p>
+          <p class="project-pattern">Watch Cap & Mitts</p>
+          <p class="project-designer">by Jake Canton</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Christmas_Hat_for_Pasi_2021_3b34a1cc.jpg" alt="Christmas Hat for Pasi 2021" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Christmas Hat for Pasi 2021</h3>
+          <p class="project-date">November 2021</p>
+          <p class="project-yarn">Artemis Grange 3 Ply Sock Raven (Alpaca name)</p>
+          <p class="project-grams">122g</p>
+          <p class="project-pattern">Porty Hat</p>
+          <p class="project-designer">by Ysolda Teague</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Novice_Cardigan_e9e1c102.jpg" alt="Novice Cardigan" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Novice Cardigan</h3>
+          <p class="project-date">November 2021</p>
+          <p class="project-yarn">Isager Alpaca 3 2s Light</p>
+          <p class="project-grams">452g</p>
+          <p class="project-pattern">Novice Cardigan - Chunky edition</p>
+          <p class="project-designer">by PetiteKnit, Mette Wendelboe Okkels</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Beaufort_5_Cardi_da96057c.jpg" alt="Beaufort 5 Cardi" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Beaufort 5 Cardi</h3>
+          <p class="project-date">November 2021</p>
+          <p class="project-yarn">Ruxville Farm Ruxville Farm Yarn Gray</p>
+          <p class="project-grams">354g</p>
+          <p class="project-pattern">Beaufort 5 Cardi</p>
+          <p class="project-designer">by Isabell Kraemer</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/In_Control_for_Allison_8037fbea.jpg" alt="In Control for Allison" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">In Control for Allison</h3>
+          <p class="project-date">October 2021</p>
+          
+          
+          <p class="project-pattern">In Control</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Sockhead_Slouch_for_Emma_Singleton_5397f0b6.jpg" alt="Sockhead Slouch for Emma Singleton" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Sockhead Slouch for Emma Singleton</h3>
+          <p class="project-date">October 2021</p>
+          <p class="project-yarn">Hypnotic Yarn Plush Sock - 2021-09 Born to be Mild</p>
+          <p class="project-grams">39g</p>
+          <p class="project-pattern">Sockhead Slouch</p>
+          <p class="project-designer">by Kelly McClure</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Baby_Dress_for_Grace_Benfell_2fbdc253.jpg" alt="Baby Dress for Grace Benfell" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Baby Dress for Grace Benfell</h3>
+          <p class="project-date">October 2021</p>
+          <p class="project-yarn">KnitPicks Swish Hollyberry</p>
+          <p class="project-grams">139g</p>
+          <p class="project-pattern">Baby Dress</p>
+          <p class="project-designer">by Diane Soucy</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Glo_and_Go_c83cf705.jpg" alt="Glo and Go" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Glo and Go</h3>
+          <p class="project-date">September 2021</p>
+          
+          
+          <p class="project-pattern">Glo and Go</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Catch_All_Caddy_07b7356a.jpg" alt="Catch All Caddy" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Catch All Caddy</h3>
+          <p class="project-date">September 2021</p>
+          
+          
+          <p class="project-pattern">Catch All Caddy</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Soft_Cotton_Washcloth_769723b5.jpg" alt="Soft Cotton Washcloth" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Soft Cotton Washcloth</h3>
+          <p class="project-date">September 2021</p>
+          <p class="project-yarn">KnitPicks Comfy Worsted Hydrangea #8056</p>
+          <p class="project-grams">15g</p>
+          <p class="project-pattern">Soft Cotton Washcloth</p>
+          <p class="project-designer">by Purl Soho</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Piecekeeper_2_0_732ef38f.jpg" alt="Piecekeeper 2.0" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Piecekeeper 2.0</h3>
+          <p class="project-date">September 2021</p>
+          
+          
+          <p class="project-pattern">Piecekeeper</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Call_Me_fb927ef3.jpg" alt="Call Me" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Call Me</h3>
+          <p class="project-date">September 2021</p>
+          
+          
+          <p class="project-pattern">Call Me</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Contain_Yourself_cb462db5.jpg" alt="Contain Yourself" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Contain Yourself</h3>
+          <p class="project-date">September 2021</p>
+          
+          
+          <p class="project-pattern">Contain Yourself</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Juist_No2_for_Sam_25baa967.jpg" alt="Juist No2 for Sam" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Juist No2 for Sam</h3>
+          <p class="project-date">September 2021</p>
+          <p class="project-yarn">Loops & Threads Impeccable Classic Gray</p>
+          <p class="project-grams">388g</p>
+          <p class="project-pattern">Juist No2</p>
+          <p class="project-designer">by ANKESTRiCK</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Vanilla_Sweater_8686eca6.jpg" alt="Vanilla Sweater" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Vanilla Sweater</h3>
+          <p class="project-date">August 2021</p>
+          <p class="project-yarn">Rauma Finull 4126 Dark Heather</p>
+          <p class="project-grams">228g</p>
+          <p class="project-pattern">Vanilla Sweater</p>
+          <p class="project-designer">by Corinne Tomlinson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Case_in_Point_18324742.jpg" alt="Case in Point" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Case in Point</h3>
+          <p class="project-date">August 2021</p>
+          
+          
+          <p class="project-pattern">Case in Point</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Easy_Does_It_2_0_350e3ee3.jpg" alt="Easy Does It 2.0" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Easy Does It 2.0</h3>
+          <p class="project-date">August 2021</p>
+          
+          
+          <p class="project-pattern">Easy Does It Bag</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Piecekeeper_13e0ce30.jpg" alt="Piecekeeper" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Piecekeeper</h3>
+          <p class="project-date">August 2021</p>
+          
+          
+          <p class="project-pattern">Piecekeeper</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Kitchen_Scrubby_dc18cfad.jpg" alt="Kitchen Scrubby" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Kitchen Scrubby</h3>
+          <p class="project-date">August 2021</p>
+          <p class="project-yarn">Yarn Bee (Hobby Lobby) Scrub-ology Scrub It! True Blue</p>
+          <p class="project-grams">85g</p>
+          <p class="project-pattern">Welted Spiral Scrubbie</p>
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Easy_Does_It_Bag_4630b1d3.jpg" alt="Easy Does It Bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Easy Does It Bag</h3>
+          <p class="project-date">August 2021</p>
+          
+          
+          <p class="project-pattern">Easy Does It Bag</p>
+          <p class="project-designer">by Annie Unrein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Baggy_Hat_89c255cd.jpg" alt="Baggy Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Baggy Hat</h3>
+          <p class="project-date">August 2021</p>
+          <p class="project-yarn">29 Bridges Studio Non-Superwash Sock Carbon</p>
+          <p class="project-grams">58g</p>
+          <p class="project-pattern">Baggy Hat</p>
+          <p class="project-designer">by PetiteKnit, Mette Wendelboe Okkels</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Goblin_Scarf_b1abf73b.jpg" alt="Goblin Scarf" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Goblin Scarf</h3>
+          <p class="project-date">August 2021</p>
+          <p class="project-yarn">Loops & Threads Impeccable Cherry</p>
+          <p class="project-grams">233g</p>
+          <p class="project-pattern">Goblin Scarf</p>
+          <p class="project-designer">by Beak</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Capitol_Dome_Hat_db110e52.jpg" alt="Capitol Dome Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Capitol Dome Hat</h3>
+          <p class="project-date">August 2021</p>
+          <p class="project-yarn">KnitPicks High Desert Riverbend</p>
+          <p class="project-grams">48g</p>
+          <p class="project-pattern">Capitol Dome Hat</p>
+          <p class="project-designer">by Hinterm Stein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Aloft_Shawl_for_Famu_a0bbda6e.jpg" alt="Aloft Shawl for Famu" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Aloft Shawl for Famu</h3>
+          <p class="project-date">August 2021</p>
+          <p class="project-yarn">Tukuwool Tukuwool Sock H36 rohto</p>
+          <p class="project-grams">462g</p>
+          <p class="project-pattern">Aloft Shawl</p>
+          <p class="project-designer">by Bekah Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/So_Vanilla_Socks_Wildflower_aecc8777.jpg" alt="So Vanilla Socks Wildflower" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">So Vanilla Socks Wildflower</h3>
+          <p class="project-date">August 2021</p>
+          <p class="project-yarn">Hypnotic Yarn Plush Sock - 2021-06 Wildflower</p>
+          <p class="project-grams">70g</p>
+          <p class="project-pattern">So Vanilla Socks</p>
+          <p class="project-designer">by Mary Lukas</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Face_Scrubbies_46d0cd8a.jpg" alt="Face Scrubbies" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Face Scrubbies</h3>
+          <p class="project-date">July 2021</p>
+          <p class="project-yarn">KnitPicks Comfy Worsted Honeydew</p>
+          <p class="project-grams">35g</p>
+          <p class="project-pattern">Easy Face Scrubbies</p>
+          <p class="project-designer">by Lizzie Rose Knits</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Easygoing_Sweatshirt_Mini_78f855be.jpg" alt="Easygoing Sweatshirt Mini" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Easygoing Sweatshirt Mini</h3>
+          <p class="project-date">June 2021</p>
+          <p class="project-yarn">KnitPicks Comfy Worsted Honeydew</p>
+          <p class="project-grams">190g</p>
+          <p class="project-pattern">Easygoing Sweatshirt Mini</p>
+          <p class="project-designer">by Amy Herzog</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Felt_Fabric_Experiment_ad14ccb2.jpg" alt="Felt Fabric Experiment" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Felt Fabric Experiment</h3>
+          <p class="project-date">June 2021</p>
+          <p class="project-yarn">Lion Brand Yarns Fishermen's Wool Oatmeal</p>
+          
+          
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Leah_Drawstring_Bag_-_Large_792994f8.jpg" alt="Leah Drawstring Bag - Large" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Leah Drawstring Bag - Large</h3>
+          <p class="project-date">June 2021</p>
+          
+          
+          <p class="project-pattern">Leah Drawstring Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Leah_Drawstring_Bag_-_Small_5cb9ad9c.jpg" alt="Leah Drawstring Bag - Small" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Leah Drawstring Bag - Small</h3>
+          <p class="project-date">June 2021</p>
+          
+          
+          <p class="project-pattern">Leah Drawstring Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Bulky_Sleep_Socks_Andes_32e1be3a.jpg" alt="Bulky Sleep Socks Andes" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Bulky Sleep Socks Andes</h3>
+          <p class="project-date">June 2021</p>
+          <p class="project-yarn">KnitPicks Wool of the Andes Superwash Bulky Aurora Heather</p>
+          <p class="project-grams">113g</p>
+          <p class="project-pattern">So Vanilla Socks</p>
+          <p class="project-designer">by Mary Lukas</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/So_Vanilla_Socks_black_stripes_c5c700da.jpg" alt="So Vanilla Socks black stripes" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">So Vanilla Socks black stripes</h3>
+          <p class="project-date">June 2021</p>
+          <p class="project-yarn">Yarnspirations Patons Kroy Socks Slate Jacquard</p>
+          <p class="project-grams">87g</p>
+          <p class="project-pattern">So Vanilla Socks</p>
+          <p class="project-designer">by Mary Lukas</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Buttercup_Mini_Vest_ba9cc929.jpg" alt="Buttercup Mini Vest" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Buttercup Mini Vest</h3>
+          <p class="project-date">June 2021</p>
+          <p class="project-yarn">Cascade Cascade 220 Superwash Sport Peacock Blue - 293</p>
+          <p class="project-grams">87g</p>
+          <p class="project-pattern">Buttercup Mini Vest</p>
+          <p class="project-designer">by Amy Herzog</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Capitol_Dome_Hat_e407e359.jpg" alt="Capitol Dome Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Capitol Dome Hat</h3>
+          <p class="project-date">May 2021</p>
+          <p class="project-yarn">Cascade Cascade 220 Superwash Sport Lake Chelan Heather - 859</p>
+          <p class="project-grams">63g</p>
+          <p class="project-pattern">Capitol Dome Hat</p>
+          <p class="project-designer">by Hinterm Stein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Fabric_Basket_a1176fec.jpg" alt="Fabric Basket" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Fabric Basket</h3>
+          <p class="project-date">May 2021</p>
+          
+          
+          <p class="project-pattern">Fabric Basket</p>
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Fabric_Basket_30cb55fb.jpg" alt="Fabric Basket" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Fabric Basket</h3>
+          <p class="project-date">May 2021</p>
+          
+          
+          <p class="project-pattern">Fabric Basket</p>
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Flannel_Quilt_6c247751.jpg" alt="Flannel Quilt" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Flannel Quilt</h3>
+          <p class="project-date">May 2021</p>
+          
+          
+          
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Capitol_Dome_Hat_b1e1f947.jpg" alt="Capitol Dome Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Capitol Dome Hat</h3>
+          <p class="project-date">May 2021</p>
+          <p class="project-yarn">Cascade Cascade 220 Superwash Sport Silver Pine - 294</p>
+          <p class="project-grams">61g</p>
+          <p class="project-pattern">Capitol Dome Hat</p>
+          <p class="project-designer">by Hinterm Stein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Li_l_Knot_Bag_-_Gusset_e9427309.jpg" alt="Li'l Knot Bag - Gusset" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Li'l Knot Bag - Gusset</h3>
+          <p class="project-date">May 2021</p>
+          
+          
+          <p class="project-pattern">Li'l Knot Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Li_l_Knot_Bag_-_Gusset_c02b007a.jpg" alt="Li'l Knot Bag - Gusset" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Li'l Knot Bag - Gusset</h3>
+          <p class="project-date">May 2021</p>
+          
+          
+          <p class="project-pattern">Li'l Knot Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Mira_s_Cowl_in_pink_a7b0e084.jpg" alt="Mira's Cowl in pink" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Mira's Cowl in pink</h3>
+          <p class="project-date">May 2021</p>
+          <p class="project-yarn">Hypnotic Yarn Plush Sock - 2021-05 Sweet Pea</p>
+          <p class="project-grams">97g</p>
+          <p class="project-pattern">Mira's Cowl</p>
+          <p class="project-designer">by Mira Cole</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Half_Muss_Fuzzy_Gray_Hat_5cff7cdc.jpg" alt="Half Muss Fuzzy Gray Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Half Muss Fuzzy Gray Hat</h3>
+          <p class="project-date">April 2021</p>
+          <p class="project-yarn">29 Bridges Studio Non-Superwash Sock Carbon</p>
+          <p class="project-grams">58g</p>
+          <p class="project-pattern">Musselburgh Hat</p>
+          <p class="project-designer">by Ysolda Teague</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Li_l_Knot_Bag_-_Gusset_4b165c34.jpg" alt="Li'l Knot Bag - Gusset" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Li'l Knot Bag - Gusset</h3>
+          <p class="project-date">April 2021</p>
+          
+          
+          <p class="project-pattern">Li'l Knot Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Li_l_Knot_Bag_-_Gusset1_8d34844a.jpg" alt="Li'l Knot Bag - Gusset1" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Li'l Knot Bag - Gusset1</h3>
+          <p class="project-date">April 2021</p>
+          
+          
+          <p class="project-pattern">Li'l Knot Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Li_l_Knot_Bag_4de52056.jpg" alt="Li'l Knot Bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Li'l Knot Bag</h3>
+          <p class="project-date">April 2021</p>
+          
+          
+          <p class="project-pattern">Li'l Knot Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Li_l_Knot_Bag_75c0020d.jpg" alt="Li'l Knot Bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Li'l Knot Bag</h3>
+          <p class="project-date">April 2021</p>
+          
+          
+          <p class="project-pattern">Li'l Knot Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Li_l_Knot_Bag_18b0554b.jpg" alt="Li'l Knot Bag" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Li'l Knot Bag</h3>
+          <p class="project-date">April 2021</p>
+          
+          
+          <p class="project-pattern">Li'l Knot Bag</p>
+          <p class="project-designer">by Darae Johnson</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/So_Vanilla_Socks_Spumoni_b752fa1b.jpg" alt="So Vanilla Socks Spumoni" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">So Vanilla Socks Spumoni</h3>
+          <p class="project-date">April 2021</p>
+          <p class="project-yarn">Cozy Color Works Cozy Color Works Spumoni</p>
+          <p class="project-grams">61g</p>
+          <p class="project-pattern">So Vanilla Socks</p>
+          <p class="project-designer">by Mary Lukas</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Kitchen_Scrubby_2_0_a3d1ebd6.jpg" alt="Kitchen Scrubby 2.0" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Kitchen Scrubby 2.0</h3>
+          <p class="project-date">April 2021</p>
+          <p class="project-yarn">Yarn Bee (Hobby Lobby) Scrub-ology 2.0 Green</p>
+          <p class="project-grams">85g</p>
+          <p class="project-pattern">Round Knit Scrubby</p>
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Kiss_Shawl_for_Mom_4fd73a98.jpg" alt="Kiss Shawl for Mom" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Kiss Shawl for Mom</h3>
+          <p class="project-date">April 2021</p>
+          <p class="project-yarn">dreamincoloryarn.com Smooshy with Cashmere Malibu Sail 12</p>
+          <p class="project-grams">114g</p>
+          <p class="project-pattern">Kiss Shawl</p>
+          <p class="project-designer">by Louise Tilbrook</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Felted_coasters_00f4cbca.jpg" alt="Felted coasters" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Felted coasters</h3>
+          <p class="project-date">April 2021</p>
+          <p class="project-yarn">Patons Classic Wool Worsted Claret</p>
+          <p class="project-grams">200g</p>
+          
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Sock_Blockers_cde1866d.jpg" alt="Sock Blockers" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Sock Blockers</h3>
+          <p class="project-date">March 2021</p>
+          
+          
+          
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Nice_and_knit_beanie_for_Dad_7649c53a.jpg" alt="Nice and knit beanie for Dad" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Nice and knit beanie for Dad</h3>
+          <p class="project-date">March 2021</p>
+          <p class="project-yarn">magpie fibers Nest Worsted Marled Castaway</p>
+          <p class="project-grams">50g</p>
+          <p class="project-pattern">Nice & Knit Beanie</p>
+          <p class="project-designer">by Nice and Knit</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Felted_soap_e5a42953.jpg" alt="Felted soap" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Felted soap</h3>
+          <p class="project-date">March 2021</p>
+          
+          
+          
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Felted_Easter_eggs_15c47b2e.jpg" alt="Felted Easter eggs" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Felted Easter eggs</h3>
+          <p class="project-date">March 2021</p>
+          
+          
+          
+          
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Cuadro_Cuddly_Blanket_for_Luna_Price__3b18d176.jpg" alt="Cuadro Cuddly Blanket for Luna Price " loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Cuadro Cuddly Blanket for Luna Price </h3>
+          <p class="project-date">March 2021</p>
+          <p class="project-yarn">Loops & Threads Impeccable Indigo</p>
+          <p class="project-grams">306g</p>
+          <p class="project-pattern">Cuadro Cuddly Baby Blanket</p>
+          <p class="project-designer">by Carmin Beck</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Lightweight_Hipster_Scarf_cdafacfe.jpg" alt="Lightweight Hipster Scarf" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Lightweight Hipster Scarf</h3>
+          <p class="project-date">March 2021</p>
+          <p class="project-yarn">magpie fibers Swanky Sock Careless Whisper</p>
+          <p class="project-grams">112g</p>
+          <p class="project-pattern">Lightweight Hipster</p>
+          <p class="project-designer">by Joji Locatelli</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Capitol_Dome_Hat_4f0f390d.jpg" alt="Capitol Dome Hat" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Capitol Dome Hat</h3>
+          <p class="project-date">February 2021</p>
+          <p class="project-yarn">malabrigo Caprino 033 Cereza</p>
+          <p class="project-grams">38g</p>
+          <p class="project-pattern">Capitol Dome Hat</p>
+          <p class="project-designer">by Hinterm Stein</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Nice_and_Knit_Beanie_for_Pasi_6499cd4e.jpg" alt="Nice and Knit Beanie for Pasi" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Nice and Knit Beanie for Pasi</h3>
+          <p class="project-date">February 2021</p>
+          <p class="project-yarn">magpie fibers Nest Worsted Marled Castaway</p>
+          <p class="project-grams">49g</p>
+          <p class="project-pattern">Nice & Knit Beanie</p>
+          <p class="project-designer">by Nice and Knit</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Basic_Scarf_for_Pete_90c5fcf8.jpg" alt="Basic Scarf for Pete" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Basic Scarf for Pete</h3>
+          <p class="project-date">February 2021</p>
+          <p class="project-yarn">malabrigo Caprino 852 Persia</p>
+          <p class="project-grams">177g</p>
+          <p class="project-pattern">Basic Scarf</p>
+          <p class="project-designer">by Purl Soho</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Mati_s_Bracelet_8d9176c5.jpg" alt="Mati’s Bracelet" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Mati’s Bracelet</h3>
+          <p class="project-date">February 2021</p>
+          <p class="project-yarn">KnitPicks Felici Sock Yarn Beyond the Wall</p>
+          <p class="project-grams">2g</p>
+          <p class="project-pattern">I cord pattern</p>
+          <p class="project-designer">by Purl Soho</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Classic_Ribbed_Hat_for_Pete_1de7f682.jpg" alt="Classic Ribbed Hat for Pete" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Classic Ribbed Hat for Pete</h3>
+          <p class="project-date">February 2021</p>
+          <p class="project-yarn">malabrigo Caprino 852 Persia</p>
+          <p class="project-grams">58g</p>
+          <p class="project-pattern">Classic Ribbed Hat</p>
+          <p class="project-designer">by Jake Canton</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Sockhead_Slouch_Hat_for_Luna_3078bd77.jpg" alt="Sockhead Slouch Hat for Luna" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Sockhead Slouch Hat for Luna</h3>
+          <p class="project-date">January 2021</p>
+          <p class="project-yarn">Misti Alpaca Misti Alpaca Hand Painted Sock Yarn Miriam HS07</p>
+          <p class="project-grams">39g</p>
+          <p class="project-pattern">Sockhead Slouch</p>
+          <p class="project-designer">by Kelly McClure</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Sockhead_Slouch_Hat_for_Sam_02c3c719.jpg" alt="Sockhead Slouch Hat for Sam" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Sockhead Slouch Hat for Sam</h3>
+          <p class="project-date">January 2021</p>
+          <p class="project-yarn">Misti Alpaca Misti Alpaca Hand Painted Sock Yarn Miriam HS07</p>
+          <p class="project-grams">58g</p>
+          <p class="project-pattern">Sockhead Slouch</p>
+          <p class="project-designer">by Kelly McClure</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/So_Vanilla_Socks_North_Sea_Heather_40b6d002.jpg" alt="So Vanilla Socks North Sea Heather" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">So Vanilla Socks North Sea Heather</h3>
+          <p class="project-date">January 2021</p>
+          <p class="project-yarn">KnitPicks Stroll Tweed North Sea Heather</p>
+          <p class="project-grams">63g</p>
+          <p class="project-pattern">So Vanilla Socks</p>
+          <p class="project-designer">by Mary Lukas</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/So_Vanilla_Socks_Felici_first_pair_977f9066.jpg" alt="So Vanilla Socks Felici first pair" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">So Vanilla Socks Felici first pair</h3>
+          <p class="project-date">December 2020</p>
+          <p class="project-yarn">KnitPicks Felici Sock Yarn Beyond the Wall</p>
+          <p class="project-grams">63g</p>
+          <p class="project-pattern">So Vanilla Socks</p>
+          <p class="project-designer">by Mary Lukas</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-image">
+          <img src="photos/Needle_case_4daf2c29.jpg" alt="Needle case" loading="lazy" />
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">Needle case</h3>
+          
+          
+          
+          <p class="project-pattern">Snazzy Knitting Needle Case</p>
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    handcrafted stitch by stitch ✦ needles always busy
+  </footer>
+
+</body>
+</html>
