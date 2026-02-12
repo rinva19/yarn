@@ -2,15 +2,22 @@
 """
 Generate a static HTML knitting gallery from Airtable data.
 Downloads project photos and creates a photo grid with project details.
+
+Run from anywhere: python /Users/vorimor/Documents/Household/Yarn/generate_knits_gallery.py
 """
 
 import os
+import sys
 import requests
 import hashlib
 from datetime import datetime
+
+# Set up paths relative to this script's location
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, SCRIPT_DIR)
 from credentials import AIRTABLE_TOKEN, AIRTABLE_BASE_ID
 
-OUTPUT_DIR = '/Users/vorimor/Documents/Household/Yarn'
+OUTPUT_DIR = SCRIPT_DIR
 PHOTOS_DIR = os.path.join(OUTPUT_DIR, 'photos')
 OUTPUT_FILE = os.path.join(OUTPUT_DIR, 'index.html')
 

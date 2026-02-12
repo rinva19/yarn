@@ -1,12 +1,41 @@
+# Rebecca's Knits
+
+A static knitting gallery website at **https://rinva19.github.io/yarn/**
+
+## Update the Website
+
+Run this command from anywhere:
+
+```bash
+python3 ~/Documents/Household/Yarn/generate_knits_gallery.py
+```
+
+Then push to GitHub:
+
+```bash
+cd ~/Documents/Household/Yarn && git add -A && git commit -m "Update gallery" && git push
+```
+
+The site updates automatically after pushing.
+
+## What It Does
+
+- Pulls all knitting projects from the Airtable Projects table
+- Downloads the first photo from each project
+- Computes stats from Summary Tables (miles knitted, miles in stash)
+- Generates `index.html` with a photo grid
+
+Only projects with yarn assigned are included (excludes sewing/quilts).
+
+---
+
 # Yarn Matcher
 
-Match Ravelry knitting patterns with your personal yarn stash stored in Airtable.
-
-## How to Use
+Match Ravelry knitting patterns with your yarn stash.
 
 ### Step 1: Get Pattern JSON
 
-Open a new Claude chat (claude.ai) and use this prompt:
+Open Claude (claude.ai) and use this prompt:
 
 ```
 YARN PATTERN ANALYZER
@@ -31,7 +60,7 @@ Please parse this and return a JSON object with:
   - color (e.g., "Color A (main)", "Color B (contrast)")
   - held_together_with (null or yarn name if held together)
 - combined_grist (if yarns held together)
-- notes (single string of relevant construction info, written as natural sentences separated by periods, no list formatting)
+- notes (single string of relevant construction info)
 
 Format as clean JSON only, no markdown code blocks.
 ```
@@ -39,75 +68,13 @@ Format as clean JSON only, no markdown code blocks.
 ### Step 2: Run the Matcher
 
 ```bash
-cd /Users/vorimor/Documents/Household/Yarn
-python3 yarn_matcher.py
+python3 ~/Documents/Household/Yarn/yarn_matcher.py
 ```
 
-Paste the JSON when prompted, press Enter, then Ctrl+D.
+Paste the JSON, press Enter, then Ctrl+D.
 
 ### Step 3: View Results
 
-The script generates an HTML report and opens it automatically in your browser.
+The script generates an HTML report and opens it in your browser.
 
-## Setup Requirements
-
-- Python 3.11+
-- Airtable account with Making database
-- API credentials in `credentials.py` (see below)
-
-## Credentials Setup
-
-Create `credentials.py` with:
-
-```python
-# Ravelry API (not currently used)
-RAVELRY_ACCESS_KEY = "your-key"
-RAVELRY_PERSONAL_KEY = "your-key"
-
-# Airtable API
-AIRTABLE_TOKEN = "your-token"
-AIRTABLE_BASE_ID = "your-base-id"
-AIRTABLE_TABLE_NAME = "Yarn"
-```
-
-## Output
-
-HTML reports saved to: `pattern_matches/pattern_match_[pattern-name]_[date].html`
-
----
-
-# Rebecca's Knits Gallery
-
-A static HTML knitting gallery generated from Airtable, designed for GitHub Pages.
-
-## Generate the Gallery
-
-```bash
-python generate_knits_gallery.py
-```
-
-This will:
-- Fetch all projects from the Airtable Projects table
-- Download the first photo from each project to `photos/`
-- Pull stats from Summary Tables (miles knitted, miles in stash)
-- Generate `index.html` with a photo grid of all finished projects
-
-## Deploy to GitHub Pages
-
-1. Commit and push:
-   ```bash
-   git add index.html photos/
-   git commit -m "Update knitting gallery"
-   git push
-   ```
-
-2. Enable GitHub Pages in repo settings:
-   - Go to Settings > Pages
-   - Set Source to "Deploy from a branch"
-   - Select `main` branch and `/ (root)` folder
-
-The site will be live at `https://yourusername.github.io/Yarn/`
-
-## Updating
-
-Re-run `python generate_knits_gallery.py` whenever you add new projects, then commit and push.
+Reports saved to: `pattern_matches/pattern_match_[pattern-name]_[date].html`
