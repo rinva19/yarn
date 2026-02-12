@@ -451,6 +451,12 @@ def main():
             print(f'  Skipping {name} (no photo URL)')
             continue
 
+        # Only include knitting projects (those with yarn)
+        yarn_ids = fields.get('Yarn', [])
+        if not yarn_ids:
+            print(f'  Skipping {name} (no yarn - not a knitting project)')
+            continue
+
         print(f'  Processing: {name}')
         photo_path = download_photo(photo_url, name)
 
@@ -459,8 +465,7 @@ def main():
         pattern_info = patterns.get(pattern_ids[0], {}) if pattern_ids else {}
 
         # Get yarn info
-        yarn_ids = fields.get('Yarn', [])
-        yarn_info = yarns.get(yarn_ids[0], {}) if yarn_ids else {}
+        yarn_info = yarns.get(yarn_ids[0], {})
         yarn_name_parts = [yarn_info.get('Brand', ''), yarn_info.get('Name', ''), yarn_info.get('Color Name', '')]
         yarn_name = ' '.join(part for part in yarn_name_parts if part)
 
