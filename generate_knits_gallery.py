@@ -8,6 +8,7 @@ Run from anywhere: python /Users/vorimor/Documents/Household/Yarn/generate_knits
 
 import os
 import sys
+import subprocess
 import requests
 import hashlib
 from datetime import datetime
@@ -79,6 +80,8 @@ def download_photo(photo_url, project_name):
         response.raise_for_status()
         with open(filepath, 'wb') as f:
             f.write(response.content)
+        # Resize to max 1200px width for web
+        subprocess.run(['sips', '-Z', '1200', filepath], capture_output=True)
         return f'photos/{filename}'
     except Exception as e:
         print(f'  Error downloading photo for {project_name}: {e}')
@@ -492,7 +495,7 @@ def main():
 
     # Generate HTML
     print(f'\nGenerating HTML with {len(projects)} projects...')
-    finished_count = len(project_records)
+    finished_count = len(projects)  # Only count knitting projects
     html = generate_html(projects, finished_count, miles_knitted, miles_available)
 
     with open(OUTPUT_FILE, 'w') as f:
