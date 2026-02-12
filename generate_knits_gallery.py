@@ -80,8 +80,8 @@ def download_photo(photo_url, project_name):
         response.raise_for_status()
         with open(filepath, 'wb') as f:
             f.write(response.content)
-        # Resize to max 1200px width for web
-        subprocess.run(['sips', '-Z', '1200', filepath], capture_output=True)
+        # Resize to 800px and compress for fast web loading
+        subprocess.run(['sips', '-Z', '800', '-s', 'formatOptions', '70', filepath], capture_output=True)
         return f'photos/{filename}'
     except Exception as e:
         print(f'  Error downloading photo for {project_name}: {e}')
