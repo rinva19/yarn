@@ -61,14 +61,13 @@ def build_lookup_table(records, fields):
     return lookup
 
 
-def download_photo(photo_url, project_name):
+def download_photo(photo_url, project_name, attachment_id):
     """Download a photo and save to photos/ folder. Returns local filename."""
     os.makedirs(PHOTOS_DIR, exist_ok=True)
 
-    # Create a safe filename using hash of URL + project name
-    url_hash = hashlib.md5(photo_url.encode()).hexdigest()[:8]
+    # Use stable attachment ID for filename (not URL which changes)
     safe_name = ''.join(c if c.isalnum() or c in '-_' else '_' for c in project_name)[:50]
-    filename = f'{safe_name}_{url_hash}.jpg'
+    filename = f'{safe_name}_{attachment_id}.jpg'
     filepath = os.path.join(PHOTOS_DIR, filename)
 
     # Skip if already downloaded
@@ -457,6 +456,7 @@ def main():
             continue
 
         photo_url = photos[0].get('url')
+        attachment_id = photos[0].get('id', '')[:8]  # Use first 8 chars of stable ID
         if not photo_url:
             print(f'  Skipping {name} (no photo URL)')
             continue
@@ -468,7 +468,7 @@ def main():
             continue
 
         print(f'  Processing: {name}')
-        photo_path = download_photo(photo_url, name)
+        photo_path = download_photo(photo_url, name, attachment_id)
 
         # Get pattern info
         pattern_ids = fields.get('Pattern', [])
