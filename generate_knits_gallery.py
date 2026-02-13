@@ -107,13 +107,16 @@ def generate_html(projects, finished_count, miles_knitted, miles_available):
         photo_path = project.get('photo_path', '')
         name = project.get('name', 'Untitled')
         date_finished = project.get('date_finished', '')
-        yarn_name = project.get('yarn_name', '')
+        yarn_names = project.get('yarn_names', [])
         grams = project.get('grams', '')
         pattern_name = project.get('pattern_name', '')
         designer = project.get('designer', '')
 
         if not photo_path:
             continue
+
+        # Build yarn HTML (each yarn on its own line)
+        yarns_html = ''.join(f'<p class="project-yarn">{yn}</p>' for yn in yarn_names)
 
         card = f'''      <div class="project-card">
         <div class="card-image">
@@ -122,7 +125,7 @@ def generate_html(projects, finished_count, miles_knitted, miles_available):
         <div class="card-content">
           <h3 class="project-name">{name}</h3>
           {f'<p class="project-date">{date_finished}</p>' if date_finished else ''}
-          {f'<p class="project-yarn">{yarn_name}</p>' if yarn_name else ''}
+          {yarns_html}
           {f'<p class="project-grams">{grams}g</p>' if grams else ''}
           {f'<p class="project-pattern">{pattern_name}</p>' if pattern_name else ''}
           {f'<p class="project-designer">by {designer}</p>' if designer else ''}
@@ -474,17 +477,21 @@ def main():
         pattern_ids = fields.get('Pattern', [])
         pattern_info = patterns.get(pattern_ids[0], {}) if pattern_ids else {}
 
-        # Get yarn info
-        yarn_info = yarns.get(yarn_ids[0], {})
-        yarn_name_parts = [yarn_info.get('Brand', ''), yarn_info.get('Name', ''), yarn_info.get('Color Name', '')]
-        yarn_name = ' '.join(part for part in yarn_name_parts if part)
+        # Get all yarn info
+        yarn_names = []
+        for yarn_id in yarn_ids:
+            yarn_info = yarns.get(yarn_id, {})
+            parts = [yarn_info.get('Brand', ''), yarn_info.get('Name', ''), yarn_info.get('Color Name', '')]
+            yarn_name = ' '.join(part for part in parts if part)
+            if yarn_name:
+                yarn_names.append(yarn_name)
 
         projects.append({
             'name': name,
             'photo_path': photo_path,
             'date_finished_raw': fields.get('Date Finished', ''),
             'date_finished': format_date(fields.get('Date Finished', '')),
-            'yarn_name': yarn_name,
+            'yarn_names': yarn_names,  # List of all yarns used
             'grams': fields.get('Total Grams Used (from Yarn Usage)', ''),
             'pattern_name': pattern_info.get('Name', ''),
             'designer': pattern_info.get('Designer', ''),
